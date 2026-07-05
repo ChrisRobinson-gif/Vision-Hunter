@@ -1,0 +1,3495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISION HUNTER.ai • ADHD Life Companion</title>
+    <!-- Tailwind via CDN (for prototyping). Warning suppressed below. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Suppress Tailwind CDN production warning in console
+      (function() {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #111111;
+            --accent: #111111;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .adhd-friendly {
+            line-height: 1.7;
+        }
+
+        .section {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-active {
+            background-color: #6366f1;
+            color: white !important;
+            border-radius: 9999px;
+        }
+
+        .task-item {
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+        }
+
+        .win-celebration {
+            animation: pop 0.4s ease forwards;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .timeline-block {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modern-button {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modern-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .lumin-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mock-ai {
+            background: linear-gradient(to bottom, #f8fafc, #f1e7ff);
+        }
+
+        .adhd-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.06), 0 4px 6px -4px rgb(15 23 42 / 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .adhd-card:hover {
+            box-shadow: 0 20px 25px -5px rgb(15 23 42 / 0.08), 0 8px 10px -6px rgb(15 23 42 / 0.08);
+        }
+
+        .gentle-shadow {
+            box-shadow: 0 20px 25px -5px rgb(15 23 42 / 0.08), 0 8px 10px -6px rgb(15 23 42 / 0.08);
+        }
+
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            background-color: #f1e7ff;
+            color: #6366f1;
+        }
+
+        .metric {
+            transition: transform 0.2s ease;
+        }
+
+        .capture-input {
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .mini-wins {
+            scrollbar-width: thin;
+        }
+
+        .idea-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .idea-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+        }
+
+        .focus-timer {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .para-tag {
+            font-size: 0.65rem;
+            padding: 1px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .tab-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #475569;
+            font-weight: 500;
+        }
+        .tab-btn:hover {
+            background-color: #f1e7ff;
+            color: #4f46e5;
+        }
+        .tab-btn.active-tab {
+            background-color: #111111;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+            font-weight: 600;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .section-content {
+            display: none;
+        }
+        .section-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- ==================== LANDING PAGE (Conversion Focused) ==================== -->
+    <div id="landing-page">
+        <!-- Hero Section -->
+        <div class="bg-white">
+            <div class="max-w-7xl mx-auto px-6 pt-16 pb-20 text-center">
+                <div class="inline-flex items-center gap-x-2 px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium mb-6">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>Built specifically for ADHD brains</span>
+                </div>
+                
+                <h1 class="font-display text-6xl md:text-7xl font-semibold tracking-tighter leading-none mb-6">
+                    Finally, an AI that<br>actually understands<br>your ADHD brain.
+                </h1>
+                
+                <p class="max-w-2xl mx-auto text-xl text-slate-600 mb-10">
+                    VISION HUNTER.ai turns scattered thoughts into clear action. 
+                    Voice-first. Location-aware. Built for real accountability.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="showSignUpModal()" 
+                            class="px-10 py-4 bg-black hover:bg-gray-900 text-white text-lg font-semibold rounded-3xl transition-all flex items-center justify-center gap-x-3 modern-button">
+                        Start 7-day free trial
+                    </button>
+                    <button onclick="document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })" 
+                            class="px-8 py-4 border border-slate-300 hover:bg-slate-100 text-lg font-semibold rounded-3xl transition-all">
+                        See pricing
+                    </button>
+                </div>
+                
+                <div class="mt-8 text-sm text-slate-500">
+                    No credit card required • Cancel anytime • $29/month after trial
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Proof / Benefits -->
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="text-5xl mb-4">🎯</div>
+                    <div class="font-semibold text-xl mb-2">Voice-First Everything</div>
+                    <p class="text-slate-600">Just speak. It transcribes, organizes, and logs everything automatically — including location.</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl mb-4">📊</div>
+                    <div class="font-semibold text-xl mb-2">Real Accountability Data</div>
+                    <p class="text-slate-600">See exactly what you did every day, week, and month with beautiful visual dashboards and pie charts.</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl mb-4">🧠</div>
+                    <div class="font-semibold text-xl mb-2">Built for ADHD</div>
+                    <p class="text-slate-600">Low friction. Gentle language. Chunked tasks. No judgment. Designed by people who get it.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Section -->
+        <div id="pricing" class="bg-white py-16 border-t">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="font-semibold text-4xl mb-3">Simple, transparent pricing</div>
+                <p class="text-xl text-slate-600 mb-10">One plan. Everything you need. Cancel anytime.</p>
+                
+                <div class="max-w-md mx-auto bg-white border border-slate-200 rounded-3xl p-8 gentle-shadow">
+                    <div class="flex justify-between items-baseline mb-6">
+                        <div>
+                            <div class="text-5xl font-semibold">$29</div>
+                            <div class="text-slate-500">per month</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">MOST POPULAR</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="text-left space-y-3 mb-8 text-sm">
+                        <li class="flex gap-x-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Unlimited voice notes + transcription</li>
+                        <li class="flex gap-x-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Smart activity + location logging</li>
+                        <li class="flex gap-x-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Full visual dashboards (Calendar, Journal, Health, Activity)</li>
+                        <li class="flex gap-x-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> AI Coach that actually gets ADHD</li>
+                        <li class="flex gap-x-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Email integration + extraction</li>
+                        <li class="flex gap-x-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Priority support</li>
+                    </ul>
+                    
+                    <button onclick="showSignUpModal()" 
+                            class="w-full py-4 bg-black hover:bg-gray-900 text-white text-lg font-semibold rounded-3xl modern-button">
+                        Start 7-day free trial
+                    </button>
+                    <div class="text-xs text-slate-500 mt-3">Then $29/month. Cancel anytime.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final CTA -->
+        <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+            <h2 class="font-display text-4xl font-semibold tracking-tight mb-4">Ready to stop feeling scattered?</h2>
+            <p class="text-xl text-slate-600 mb-8">Join hundreds of ADHD founders, creators, and professionals who finally have a system that works with their brain.</p>
+            <button onclick="showSignUpModal()" 
+                    class="px-12 py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-semibold rounded-3xl modern-button">
+                Start your free trial today
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN APP (Hidden until signed up) ==================== -->
+    <div id="main-app" class="hidden">
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <div>
+                        <span class="font-display text-[28px] md:text-[32px] font-black tracking-[-2.5px] text-black">VISION HUNTER</span>
+                        <span class="text-[10px] md:text-xs font-medium tracking-[2px] text-slate-500 ml-1">.ai</span>
+                    </div>
+                    <div class="hidden sm:flex px-2.5 py-1 md:px-3 md:py-1 bg-emerald-100 text-emerald-700 text-[10px] md:text-xs font-semibold rounded-full items-center gap-x-1">
+                        <i class="fa-solid fa-brain text-xs"></i>
+                        <span class="font-medium">ADHD Optimized</span>
+                    </div>
+                </div>
+
+                <!-- User -->
+                <div class="flex items-center gap-x-2 md:gap-x-4">
+                    <div class="flex items-center gap-x-2 text-sm">
+                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-user text-indigo-600"></i>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="font-semibold text-sm">Alex Rivera</div>
+                            <div class="text-[10px] text-slate-500 -mt-0.5">ADHD • Creator &amp; Founder</div>
+                        </div>
+                    </div>
+                    <button onclick="showEmailsModal()" 
+                            class="px-3 md:px-4 py-2 text-sm font-medium flex items-center gap-x-2 hover:bg-slate-100 rounded-2xl transition-colors border border-slate-200">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span class="hidden md:inline">Emails</span>
+                    </button>
+                    <button onclick="showSettings()" 
+                            class="px-3 md:px-4 py-2 text-sm font-medium flex items-center gap-x-2 hover:bg-slate-100 rounded-2xl transition-colors">
+                        <i class="fa-solid fa-cog"></i>
+                        <span class="hidden md:inline">Settings</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Top Tab Navigation - New Vision Structure -->
+    <div class="bg-white border-b border-slate-200 sticky top-[64px] md:top-[80px] z-40">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex overflow-x-auto hide-scrollbar gap-x-1 py-2 text-sm font-medium">
+                <button onclick="switchTab('today')" id="tab-today"
+                        class="tab-btn px-5 py-2 rounded-3xl flex items-center gap-x-2 whitespace-nowrap active-tab">
+                    <i class="fa-solid fa-sun"></i> <span>Today</span>
+                </button>
+                <button onclick="switchTab('history')" id="tab-history"
+                        class="tab-btn px-5 py-2 rounded-3xl flex items-center gap-x-2 whitespace-nowrap hover:bg-slate-100">
+                    <i class="fa-solid fa-chart-line"></i> <span>History</span>
+                </button>
+                <button onclick="switchTab('voice')" id="tab-voice"
+                        class="tab-btn px-5 py-2 rounded-3xl flex items-center gap-x-2 whitespace-nowrap hover:bg-slate-100">
+                    <i class="fa-solid fa-microphone"></i> <span>Voice</span>
+                </button>
+                <button onclick="switchTab('me')" id="tab-me"
+                        class="tab-btn px-5 py-2 rounded-3xl flex items-center gap-x-2 whitespace-nowrap hover:bg-slate-100">
+                    <i class="fa-solid fa-user"></i> <span>Me</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 md:px-6 pt-6 md:pt-8 pb-12 md:pb-16">
+        
+        <!-- Welcome Header -->
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-6 md:mb-8 gap-y-4">
+            <div>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-x-3 mb-1">
+                    <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tighter">Good morning, Alex.</h1>
+                    <div class="mt-2 sm:mt-0 px-3 py-1.5 md:px-4 md:py-1.5 bg-white rounded-3xl border border-slate-200 text-sm flex items-center gap-x-2 gentle-shadow w-fit">
+                        <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="font-medium text-emerald-600">Energy: <span id="current-energy">Medium</span></span>
+                    </div>
+                </div>
+                <p class="text-base md:text-xl text-slate-600">Let's make today feel manageable and meaningful. One tiny step at a time.</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <button onclick="quickWin()" 
+                        class="px-4 py-3 md:px-5 md:py-3 bg-white hover:bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold rounded-3xl flex items-center justify-center gap-x-2 transition-all active:scale-[0.985] text-sm md:text-base">
+                    <i class="fa-solid fa-tachometer-alt"></i>
+                    <span>Log a tiny win</span>
+                </button>
+                <button onclick="startFocusTimer()" 
+                        class="px-5 py-3 md:px-6 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-3xl flex items-center justify-center gap-x-2 transition-all active:scale-[0.985] shadow-lg shadow-indigo-500/30 text-sm md:text-base">
+                    <i class="fa-solid fa-play mr-1"></i>
+                    <span>Start Focus Session</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8 md:mb-10">
+            <div class="adhd-card rounded-3xl p-4 md:p-5 flex items-center gap-x-3 md:gap-x-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-emerald-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-check-double text-emerald-600 text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl md:text-3xl font-semibold" id="wins-today">7</div>
+                    <div class="text-xs md:text-sm text-slate-500 font-medium">Tiny wins today</div>
+                </div>
+            </div>
+            <div class="adhd-card rounded-3xl p-4 md:p-5 flex items-center gap-x-3 md:gap-x-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-amber-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-tasks text-amber-600 text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl md:text-3xl font-semibold" id="tasks-completed">4/9</div>
+                    <div class="text-xs md:text-sm text-slate-500 font-medium">Tasks done</div>
+                </div>
+            </div>
+            <div class="adhd-card rounded-3xl p-4 md:p-5 flex items-center gap-x-3 md:gap-x-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-lightbulb text-purple-600 text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl md:text-3xl font-semibold" id="ideas-captured">23</div>
+                    <div class="text-xs md:text-sm text-slate-500 font-medium">Ideas captured</div>
+                </div>
+            </div>
+            <div class="adhd-card rounded-3xl p-4 md:p-5 flex items-center gap-x-3 md:gap-x-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-sky-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-wallet text-sky-600 text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl md:text-3xl font-semibold" id="money-spent">$47</div>
+                    <div class="text-xs md:text-sm text-slate-500 font-medium">Spent this week</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- AI COACH - Primary Feature -->
+            <div class="lg:col-span-5 adhd-card rounded-3xl p-4 md:p-6 gentle-shadow flex flex-col h-[420px] md:h-[520px]">
+                <div class="flex items-center justify-between mb-3 md:mb-4">
+                    <div class="flex items-center gap-x-3">
+                        <div class="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-robot text-white text-lg md:text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-lg md:text-xl">VISION HUNTER Coach</div>
+                            <div class="text-[10px] md:text-xs text-emerald-600 font-medium flex items-center gap-x-1">
+                                <i class="fa-solid fa-circle text-[8px]"></i> 
+                                <span>Always here • ADHD-trained</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="clearChat()" class="text-xs px-2.5 py-1 hover:bg-slate-100 rounded-xl text-slate-500">Clear</button>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 md:space-y-4 pr-1 md:pr-2 mini-wins text-sm">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <!-- Quick Prompts -->
+                <div class="flex flex-wrap gap-1.5 md:gap-2 mb-2 md:mb-3 mt-1">
+                    <button onclick="quickPrompt('I\'m feeling overwhelmed with my business ideas. Help me organize them.')" 
+                            class="text-[10px] md:text-xs px-2.5 md:px-3 py-1 md:py-1.5 bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl transition-colors">Organize my ideas</button>
+                    <button onclick="quickPrompt('Help me break down launching my new product into tiny steps.')" 
+                            class="text-[10px] md:text-xs px-2.5 md:px-3 py-1 md:py-1.5 bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl transition-colors">Break down a project</button>
+                    <button onclick="quickPrompt('Plan a gentle, realistic day for me today.')" 
+                            class="text-[10px] md:text-xs px-2.5 md:px-3 py-1 md:py-1.5 bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl transition-colors">Gentle day plan</button>
+                </div>
+                
+                <!-- Input -->
+                <div class="flex gap-x-2">
+                    <input id="chat-input" type="text" placeholder="Tell me what's on your mind..." 
+                           class="flex-1 border border-slate-300 focus:border-indigo-400 rounded-3xl px-4 md:px-5 py-3 text-sm focus:outline-none"
+                           onkeypress="if (event.key === 'Enter') sendChatMessage()">
+                    <button onclick="sendChatMessage()" 
+                            class="px-5 md:px-6 bg-indigo-600 hover:bg-indigo-700 transition-colors text-white rounded-3xl flex items-center justify-center w-11 md:w-12 flex-shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="text-[9px] md:text-[10px] text-center text-slate-400 mt-1.5">Voice input in full version • Powered by advanced ADHD-aware AI</div>
+            </div>
+
+            <!-- QUICK CAPTURE -->
+            <div class="lg:col-span-7 adhd-card rounded-3xl p-4 md:p-6 gentle-shadow">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4 gap-y-2">
+                    <div>
+                        <div class="font-semibold text-lg md:text-xl flex items-center gap-x-2">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> 
+                            <span>Quick Capture</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-500">Dump thoughts, ideas, tasks. AI sorts it instantly.</p>
+                    </div>
+                    <div class="flex gap-x-2 w-full sm:w-auto">
+                        <button onclick="startVoiceRecording('capture')" 
+                                class="px-4 py-2 bg-white border border-amber-300 text-amber-600 text-sm font-semibold rounded-3xl flex items-center justify-center gap-x-2 hover:bg-amber-50 transition-all active:scale-[0.985]">
+                            <i class="fa-solid fa-microphone"></i>
+                            <span class="hidden sm:inline">Voice</span>
+                        </button>
+                        <button onclick="processCapture()" 
+                                class="px-4 py-2 md:px-5 md:py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-semibold rounded-3xl flex items-center justify-center gap-x-2 hover:brightness-105 transition-all active:scale-[0.985]">
+                            <i class="fa-solid fa-magic"></i>
+                            <span>Process with AI</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <textarea id="capture-input" rows="3" placeholder="Just type or paste anything here...&#10;• New business idea: subscription box for ADHD tools&#10;• Remember to email Sarah&#10;• Task: Finish Q3 review"
+                          class="capture-input w-full border border-slate-300 focus:border-amber-400 rounded-3xl px-4 md:px-5 py-3 md:py-4 text-base resize-y min-h-[90px] md:min-h-[118px] focus:outline-none"></textarea>
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 md:mt-3 text-xs gap-y-1">
+                    <div class="flex items-center gap-x-3 text-slate-500">
+                        <div class="flex items-center gap-x-1.5"><i class="fa-solid fa-microphone text-amber-500"></i> <span>Voice (full)</span></div>
+                        <div class="hidden sm:block">Auto-saves to inbox</div>
+                    </div>
+                    <button onclick="clearCapture()" class="text-slate-400 hover:text-slate-600 self-end sm:self-auto">Clear</button>
+                </div>
+            </div>
+
+            <!-- TODAY'S PLAN / VISUAL PLANNER (Tiimo-inspired) -->
+            <div class="lg:col-span-12 adhd-card rounded-3xl p-6 gentle-shadow">
+                <div class="flex items-center justify-between mb-5">
+                    <div class="flex items-center gap-x-3">
+                        <i class="fa-solid fa-calendar-day text-2xl text-indigo-500"></i>
+                        <div>
+                            <span class="font-semibold text-2xl">Today’s Gentle Flow</span>
+                            <span class="ml-3 text-xs px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-medium">Feb 5, 2026 • Wednesday</span>
+                        </div>
+                    </div>
+                    <button onclick="openDayPlanner()" 
+                            class="px-4 py-2 text-sm font-semibold flex items-center gap-x-2 bg-white border border-indigo-200 hover:bg-indigo-50 rounded-3xl transition-colors">
+                        <i class="fa-solid fa-edit"></i> 
+                        <span>Edit plan with AI</span>
+                    </button>
+                </div>
+
+                <div id="today-timeline" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <!-- Populated dynamically by JS -->
+                </div>
+                
+                <div class="mt-4 flex items-center gap-x-2 text-xs text-slate-500">
+                    <div class="flex-1 h-px bg-slate-200"></div>
+                    <span>Flexible blocks • Drag to reschedule in full app • Built-in focus timers</span>
+                    <div class="flex-1 h-px bg-slate-200"></div>
+                </div>
+            </div>
+
+            <!-- TASKS + PROJECTS -->
+            <div class="lg:col-span-7 adhd-card rounded-3xl p-6 gentle-shadow flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="font-semibold text-xl flex items-center gap-x-2">
+                        <i class="fa-solid fa-list-check text-indigo-500"></i> 
+                        <span>Next Actions</span>
+                    </div>
+                    <button onclick="addNewTask()" class="text-sm flex items-center gap-x-1.5 px-4 py-1.5 bg-indigo-600 text-white rounded-3xl text-xs font-semibold hover:bg-indigo-700 transition-colors">
+                        <i class="fa-solid fa-plus"></i> <span>ADD TASK</span>
+                    </button>
+                </div>
+                
+                <div id="tasks-list" class="flex-1 space-y-2 overflow-y-auto pr-1 mini-wins text-sm">
+                    <!-- JS populated tasks -->
+                </div>
+                
+                <div class="pt-3 border-t mt-auto flex justify-between text-xs text-slate-500">
+                    <div>Showing top priorities only • <button onclick="showAllTasks()" class="underline hover:text-indigo-600">view all</button></div>
+                    <div>Use <span class="font-mono text-[10px] bg-slate-100 px-1 rounded">Goblin.tools</span> style breakdowns</div>
+                </div>
+            </div>
+
+            <!-- IDEAS / SECOND BRAIN (PARA inspired) -->
+            <div class="lg:col-span-5 adhd-card rounded-3xl p-6 gentle-shadow flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <div class="font-semibold text-xl flex items-center gap-x-2">
+                            <i class="fa-solid fa-brain text-purple-500"></i> 
+                            <span>Idea Bank &amp; Second Brain</span>
+                        </div>
+                        <p class="text-xs text-slate-500">PARA organized • AI connects dots</p>
+                    </div>
+                    <button onclick="addNewIdea()" class="text-xs px-3 py-1.5 bg-purple-600 text-white rounded-3xl font-medium flex items-center gap-x-1 hover:bg-purple-700">
+                        <i class="fa-solid fa-plus"></i> <span>New</span>
+                    </button>
+                </div>
+                
+                <div id="ideas-list" class="flex-1 space-y-2.5 overflow-y-auto pr-1 mini-wins">
+                    <!-- JS populated -->
+                </div>
+                
+                <button onclick="organizeIdeasWithAI()" 
+                        class="mt-3 w-full py-2.5 text-sm font-semibold bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-3xl flex items-center justify-center gap-x-2 transition-colors">
+                    <i class="fa-solid fa-magic"></i> 
+                    <span>AI: Organize &amp; connect my ideas (PARA)</span>
+                </button>
+            </div>
+
+            <!-- JOURNALING -->
+            <div class="lg:col-span-6 adhd-card rounded-3xl p-6 gentle-shadow">
+                <div class="flex items-center gap-x-3 mb-4">
+                    <i class="fa-solid fa-book text-emerald-500 text-xl"></i>
+                    <div class="font-semibold text-xl">Daily Reflection • Reversed Journal</div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="text-xs uppercase tracking-widest text-emerald-600 font-semibold mb-1.5">TODAY'S PROMPTS (low pressure)</div>
+                    <div class="space-y-2.5">
+                        <div>
+                            <label class="text-xs font-medium text-slate-600">One win I’m proud of (tiny counts!)</label>
+                            <input id="journal-win" type="text" placeholder="Made coffee and answered 2 emails" 
+                                   class="w-full border border-slate-200 focus:border-emerald-300 rounded-2xl px-4 py-2 text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-slate-600">What drained my energy today?</label>
+                            <input id="journal-drain" type="text" placeholder="Back-to-back calls without breaks" 
+                                   class="w-full border border-slate-200 focus:border-emerald-300 rounded-2xl px-4 py-2 text-sm mt-1">
+                        </div>
+                    </div>
+                </div>
+                
+                <textarea id="journal-notes" rows="2" placeholder="Free space for thoughts, lessons, gratitude..." 
+                          class="w-full border border-slate-200 focus:border-emerald-300 rounded-3xl px-4 py-3 text-sm"></textarea>
+                
+                <div class="flex justify-between items-center mt-3">
+                    <button onclick="saveJournalEntry()" 
+                            class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-3xl flex items-center gap-x-2 transition-all">
+                        <i class="fa-solid fa-save"></i> <span>Save reflection</span>
+                    </button>
+                    <button onclick="showJournalHistory()" class="text-xs text-emerald-600 hover:underline flex items-center gap-x-1">
+                        <span>View history &amp; insights</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MONEY MANAGEMENT (simple & visual) -->
+            <div class="lg:col-span-6 adhd-card rounded-3xl p-6 gentle-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="font-semibold text-xl flex items-center gap-x-2">
+                        <i class="fa-solid fa-piggy-bank text-sky-500"></i> 
+                        <span>Money • Simple &amp; Kind</span>
+                    </div>
+                    <button onclick="logExpense()" class="text-xs px-4 py-1.5 bg-sky-600 text-white rounded-3xl font-medium flex items-center gap-x-1.5 hover:bg-sky-700">
+                        <i class="fa-solid fa-plus"></i> <span>Log expense</span>
+                    </button>
+                </div>
+                
+                <div class="flex gap-x-4">
+                    <div class="flex-1">
+                        <div class="text-xs text-slate-500 mb-1">THIS WEEK</div>
+                        <div class="text-4xl font-semibold tabular-nums" id="money-week-total">$124</div>
+                        <div class="text-xs text-emerald-600">↓ $31 from last week • Good job noticing</div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-xs text-slate-500 mb-1">QUICK CATEGORIES</div>
+                        <div class="flex flex-wrap gap-1.5 text-xs">
+                            <div class="px-2.5 py-0.5 bg-sky-100 text-sky-700 rounded-full">Food $68</div>
+                            <div class="px-2.5 py-0.5 bg-sky-100 text-sky-700 rounded-full">Transport $22</div>
+                            <div class="px-2.5 py-0.5 bg-sky-100 text-sky-700 rounded-full">Misc $34</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-xs">
+                    <div class="font-medium text-slate-600 mb-1.5">Recent transactions</div>
+                    <div id="money-recent" class="space-y-1 text-xs text-slate-600 max-h-[72px] overflow-y-auto">
+                        <!-- JS populated -->
+                    </div>
+                </div>
+                
+                <div class="mt-3 pt-3 border-t text-[10px] text-slate-500 flex items-center gap-x-2">
+                    <i class="fa-solid fa-robot text-sky-400"></i>
+                    <span>AI tip: "Your coffee runs are adding up. Want me to suggest 3 easy alternatives?"</span>
+                </div>
+            </div>
+
+            <!-- PERSONAL HEALTH ZONE (Separate from Work) -->
+            <div class="lg:col-span-12 adhd-card rounded-3xl p-5 md:p-6 gentle-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <div class="font-semibold text-xl flex items-center gap-x-2">
+                            <i class="fa-solid fa-heart-pulse text-rose-500"></i> 
+                            <span>Personal • Health &amp; Nutrition</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Your body &amp; energy zone — completely separate from work</p>
+                    </div>
+                    <div class="flex gap-x-2">
+                        <button onclick="logMovement()" class="text-xs px-3 py-1.5 bg-rose-100 text-rose-700 rounded-3xl font-medium flex items-center gap-x-1.5 hover:bg-rose-200">
+                            <i class="fa-solid fa-walking"></i> <span>Log movement</span>
+                        </button>
+                        <button onclick="logMeal()" class="text-xs px-3 py-1.5 bg-emerald-600 text-white rounded-3xl font-medium flex items-center gap-x-1.5 hover:bg-emerald-700">
+                            <i class="fa-solid fa-utensils"></i> <span>Log meal</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Movement / Fitness -->
+                    <div>
+                        <div class="text-xs font-semibold text-rose-600 mb-2 flex items-center gap-x-1.5">
+                            <span>MOVEMENT TODAY</span>
+                            <span class="text-[10px] px-2 py-0.5 bg-rose-100 text-rose-600 rounded-full" id="movement-summary">45 min • 2 activities</span>
+                        </div>
+                        <div id="movement-list" class="space-y-2 text-sm max-h-[110px] overflow-y-auto pr-1">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Meals + AI Macros -->
+                    <div>
+                        <div class="text-xs font-semibold text-emerald-600 mb-2">MEALS &amp; MACROS (AI estimated)</div>
+                        <div id="meals-list" class="space-y-2 text-sm max-h-[110px] overflow-y-auto pr-1">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="mt-2 pt-2 border-t flex items-center justify-between text-xs">
+                            <div>
+                                <span class="font-medium">Today’s estimate:</span> 
+                                <span id="macros-summary" class="font-mono text-emerald-600">P 118g • C 165g • F 72g</span>
+                            </div>
+                            <div class="flex gap-x-3">
+                                <button onclick="showDailyHealthSummary()" class="text-emerald-600 hover:underline text-xs">Health summary →</button>
+                                <button onclick="showActivityHistory()" class="text-indigo-600 hover:underline text-xs font-medium">Full Activity History →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Bottom bar: Protocols & Resources -->
+        <div class="mt-6 md:mt-8 pt-5 md:pt-6 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-y-2 md:gap-y-3 text-sm">
+            <div class="text-slate-500 text-xs md:text-sm text-center md:text-left">
+                Built with research-backed ADHD protocols: <span class="font-medium">Chunking • PARA • Reversed journaling • Visual blocking • Goblin.tools breakdowns</span>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-x-3 gap-y-1 text-xs text-center">
+                <button onclick="showProtocolsModal()" class="flex items-center justify-center gap-x-1.5 text-indigo-600 hover:text-indigo-700 font-medium">
+                    <i class="fa-solid fa-book-open"></i> <span>View full ADHD protocols</span>
+                </button>
+                <span class="hidden sm:inline text-slate-300">|</span>
+                <span class="text-emerald-600 font-medium">Prototype • Fully responsive (mobile + desktop) • Full version adds real LLM + voice</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Emails Modal (Send/Receive + AI Extraction) -->
+    <div id="emails-modal" onclick="if (event.target.id === 'emails-modal') closeEmailsModal()" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col gentle-shadow">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-5 border-b">
+                <div class="flex items-center gap-x-3">
+                    <i class="fa-solid fa-envelope text-2xl text-indigo-500"></i>
+                    <div>
+                        <div class="font-semibold text-2xl">Emails</div>
+                        <div class="text-xs text-slate-500">AI-powered extraction to your planner &amp; tasks</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-x-2">
+                    <button onclick="showComposeModal()" class="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-3xl flex items-center gap-x-2 hover:bg-indigo-700">
+                        <i class="fa-solid fa-plus"></i> <span>Compose</span>
+                    </button>
+                    <button onclick="closeEmailsModal()" class="text-2xl leading-none text-slate-400 hover:text-slate-600 px-2">&times;</button>
+                </div>
+            </div>
+            
+            <!-- Inbox Content -->
+            <div class="flex-1 overflow-hidden flex flex-col p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="font-semibold">Inbox <span id="unread-count" class="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded-full"></span></div>
+                    <button onclick="simulateReceiveEmail()" class="text-xs px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-2xl flex items-center gap-x-1.5">
+                        <i class="fa-solid fa-sync text-xs"></i> <span>Check for new mail</span>
+                    </button>
+                </div>
+                
+                <div id="email-list" class="flex-1 overflow-y-auto space-y-2 pr-1 text-sm">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div class="mt-4 pt-3 border-t text-xs text-slate-500 flex items-center gap-x-2">
+                    <i class="fa-solid fa-robot text-indigo-400"></i>
+                    <span>Click any email → AI can extract meetings, tasks, or action items straight into your day plan or task list.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Email Detail Modal (inside emails flow) -->
+    <div id="email-detail-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[110] p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-2xl w-full p-6 gentle-shadow max-h-[85vh] overflow-y-auto">
+            <div id="email-detail-content">
+                <!-- Dynamic content populated by JS -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Compose Modal -->
+    <div id="compose-modal" onclick="if (event.target.id === 'compose-modal') closeComposeModal()" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[120] p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-lg w-full p-6 gentle-shadow">
+            <div class="font-semibold text-xl mb-4 flex items-center gap-x-2">
+                <i class="fa-solid fa-paper-plane text-indigo-500"></i> Compose Email
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-medium text-slate-600">To</label>
+                    <input id="compose-to" type="text" value="sarah@partner.co" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm mt-1">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-slate-600">Subject</label>
+                    <input id="compose-subject" type="text" value="Following up on our collab chat" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm mt-1">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-slate-600 flex items-center justify-between">
+                        Message
+                        <button onclick="startVoiceRecording('email-compose')" class="text-indigo-500 hover:text-indigo-600 flex items-center gap-x-1 text-xs">
+                            <i class="fa-solid fa-microphone"></i> <span>Voice</span>
+                        </button>
+                    </label>
+                    <textarea id="compose-body" rows="6" class="w-full border border-slate-200 rounded-3xl px-4 py-3 text-sm mt-1" placeholder="Hi Sarah,&#10;&#10;Thanks again for the great conversation..."></textarea>
+                </div>
+            </div>
+            
+            <div class="flex gap-x-3 mt-5">
+                <button onclick="closeComposeModal()" class="flex-1 py-3 text-sm font-semibold border border-slate-300 rounded-3xl">Cancel</button>
+                <button onclick="sendEmail()" class="flex-1 py-3 bg-indigo-600 text-white text-sm font-semibold rounded-3xl">Send Email</button>
+            </div>
+            <p class="text-center text-[10px] mt-3 text-slate-400">In full version this connects to Gmail/Outlook with real sending + AI drafting assistance.</p>
+        </div>
+    </div>
+
+    <!-- Universal Voice Recording Modal -->
+    <div id="voice-modal" onclick="if (event.target.id === 'voice-modal') stopVoiceRecording()" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[130] p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-md w-full p-8 text-center gentle-shadow">
+            <div class="mb-6">
+                <div id="voice-mic-icon" class="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mb-4 transition-all">
+                    <i class="fa-solid fa-microphone text-white text-4xl"></i>
+                </div>
+                <div id="voice-status" class="font-semibold text-xl">Listening...</div>
+                <div id="voice-transcript" class="mt-4 min-h-[60px] text-sm text-slate-600 bg-slate-50 rounded-2xl p-4 text-left"></div>
+            </div>
+            
+            <div class="flex gap-x-3 justify-center">
+                <button onclick="stopVoiceRecording()" 
+                        class="px-8 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-3xl flex items-center gap-x-2">
+                    <i class="fa-solid fa-stop"></i> <span>Stop &amp; Use</span>
+                </button>
+                <button onclick="cancelVoiceRecording()" 
+                        class="px-6 py-3 border border-slate-300 text-sm font-medium rounded-3xl">
+                    Cancel
+                </button>
+            </div>
+            <p class="text-xs text-slate-400 mt-4">Speak naturally — VISION HUNTER will transcribe and help organize it.</p>
+        </div>
+    </div>
+    
+    <!-- Day Planner Modal -->
+    <div id="planner-modal" onclick="if (event.target.id === 'planner-modal') closePlannerModal()" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl max-w-lg w-full mx-4 p-7 gentle-shadow">
+            <div class="flex justify-between mb-5">
+                <div class="font-semibold text-2xl">AI-Assisted Day Planner</div>
+                <button onclick="closePlannerModal()" class="text-2xl leading-none text-slate-400 hover:text-slate-600">&times;</button>
+            </div>
+            
+            <div class="space-y-5 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">HOW'S YOUR ENERGY TODAY?</label>
+                    <div class="flex gap-x-2">
+                        <button onclick="setEnergyLevel(this, 'low')" class="energy-btn flex-1 py-3 border border-slate-200 rounded-2xl hover:bg-red-50 data-[active=true]:bg-red-100 data-[active=true]:border-red-300">Low • Gentle day</button>
+                        <button onclick="setEnergyLevel(this, 'medium')" class="energy-btn flex-1 py-3 border border-slate-200 rounded-2xl hover:bg-amber-50 data-[active=true]:bg-amber-100 data-[active=true]:border-amber-300" data-active="true">Medium</button>
+                        <button onclick="setEnergyLevel(this, 'high')" class="energy-btn flex-1 py-3 border border-slate-200 rounded-2xl hover:bg-emerald-50 data-[active=true]:bg-emerald-100 data-[active=true]:border-emerald-300">High • Deep work</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">TOP 3 PRIORITIES (keep it realistic)</label>
+                    <input id="priority-1" placeholder="1. Finish client proposal draft" class="w-full mb-2 border border-slate-200 rounded-2xl px-4 py-2.5 text-sm">
+                    <input id="priority-2" placeholder="2. 25-min walk + lunch outside" class="w-full mb-2 border border-slate-200 rounded-2xl px-4 py-2.5 text-sm">
+                    <input id="priority-3" placeholder="3. Review 2 business ideas from bank" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">SUGGESTED FLEXIBLE BLOCKS (AI recommended)</label>
+                    <div class="bg-slate-50 rounded-2xl p-4 text-xs space-y-1.5">
+                        <div class="flex justify-between"><span>8:30 – Morning routine + coffee</span> <span class="text-emerald-600">30m</span></div>
+                        <div class="flex justify-between"><span>9:15 – Deep work block (priority #1)</span> <span class="text-emerald-600">90m</span></div>
+                        <div class="flex justify-between"><span>11:00 – Admin &amp; emails (low energy ok)</span> <span class="text-emerald-600">45m</span></div>
+                        <div class="flex justify-between"><span>14:00 – Creative / Idea exploration</span> <span class="text-emerald-600">60m</span></div>
+                        <div class="flex justify-between"><span>16:30 – Wind down + review wins</span> <span class="text-emerald-600">20m</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex gap-x-3 mt-6">
+                <button onclick="closePlannerModal()" class="flex-1 py-3 text-sm font-semibold border border-slate-300 rounded-3xl">Cancel</button>
+                <button onclick="saveDayPlan()" class="flex-1 py-3 bg-indigo-600 text-white text-sm font-semibold rounded-3xl">Save &amp; Apply to Today</button>
+            </div>
+            <p class="text-center text-[10px] text-slate-400 mt-3">VISION HUNTER will remember your energy patterns and adapt future plans.</p>
+        </div>
+    </div>
+
+    <!-- Task Breakdown Modal -->
+    <div id="breakdown-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
+        <div class="bg-white rounded-3xl max-w-md w-full mx-4 p-6" onclick="event.stopImmediatePropagation()">
+            <div id="breakdown-content">
+                <!-- Dynamic content from JS -->
+            </div>
+        </div>
+    </div> <!-- End of main-app -->
+
+    <!-- Sign Up Modal -->
+    <div id="signup-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[200] p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 gentle-shadow">
+            <div class="text-center mb-8">
+                <div class="font-display text-3xl font-semibold mb-2">Create your account</div>
+                <p class="text-slate-600">Start your 7-day free trial today</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-medium">Full Name</label>
+                    <input type="text" value="Alex Rivera" class="w-full border border-slate-200 rounded-2xl px-4 py-3 mt-1">
+                </div>
+                <div>
+                    <label class="text-sm font-medium">Email</label>
+                    <input type="email" value="alex@visionhunter.ai" class="w-full border border-slate-200 rounded-2xl px-4 py-3 mt-1">
+                </div>
+                <div>
+                    <label class="text-sm font-medium">Password</label>
+                    <input type="password" value="demo1234" class="w-full border border-slate-200 rounded-2xl px-4 py-3 mt-1">
+                </div>
+            </div>
+            
+            <button onclick="completeSignUp()" 
+                    class="mt-6 w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-3xl text-lg modern-button">
+                Start Free Trial
+            </button>
+            
+            <div class="text-center mt-4 text-xs text-slate-500">
+                By signing up you agree to our Terms &amp; Privacy Policy.<br>
+                You'll be charged $29/month after your 7-day trial.
+            </div>
+            
+            <button onclick="hideSignUpModal()" class="mt-4 w-full text-sm text-slate-500 hover:text-slate-700">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#6366f1');
+        }
+        
+        // State management with localStorage
+        let state = {
+            tasks: [],
+            ideas: [],
+            journal: {},
+            expenses: [],
+            todayPlan: null,
+            winsToday: 0,
+            chatHistory: []
+        };
+        
+        function loadState() {
+            const saved = localStorage.getItem('lumina_state');
+            if (saved) {
+                state = JSON.parse(saved);
+            } else {
+                // Seed with realistic ADHD-friendly sample data
+                state.tasks = [
+                    { id: 1, title: "Draft Q3 investor update", priority: "high", energy: "high", completed: false, project: "Business", steps: [] },
+                    { id: 2, title: "Reply to Sarah about partnership", priority: "medium", energy: "low", completed: true, project: "Networking" },
+                    { id: 3, title: "Research ADHD-friendly CRM tools", priority: "medium", energy: "medium", completed: false, project: "Ideas" },
+                    { id: 4, title: "15-min body doubling session for admin", priority: "low", energy: "low", completed: false, project: "Personal" }
+                ];
+                state.ideas = [
+                    { id: 101, content: "Subscription box for ADHD tools & planners (niche but passionate audience)", para: "Project", created: "2026-01-28" },
+                    { id: 102, content: "Podcast episode idea: 'How I turned my scattered notes into a real product'", para: "Resource", created: "2026-02-01" },
+                    { id: 103, content: "New revenue stream: 1:1 ADHD productivity coaching for founders", para: "Project", created: "2026-02-03" }
+                ];
+                state.journal = {
+                    "2026-02-04": { win: "Finally sent that scary email", drain: "Doom scrolling after lunch", notes: "Noticed I work better after a walk. Energy high in mornings." }
+                };
+                state.expenses = [
+                    { id: 201, amount: 5.5, desc: "Coffee + muffin", category: "Food", date: "2026-02-04" },
+                    { id: 202, amount: 12, desc: "Notion yearly", category: "Tools", date: "2026-02-03" }
+                ];
+                state.emails = [
+                    { id: 301, from: "Sarah Chen <sarah@partner.co>", subject: "Partnership collab - next steps?", snippet: "Hey Alex, loved our chat. Let's schedule a quick sync next week to discuss the co-branded content idea. Available Tue or Wed afternoon?", date: "2026-02-04", read: false, body: "Hey Alex,\n\nLoved our chat yesterday. The co-branded content idea has real potential. Let's schedule a quick 30-min sync next week to align on next steps.\n\nI'm free Tue 2-4pm or Wed afternoon. Let me know what works!\n\nBest,\nSarah" },
+                    { id: 302, from: "Investor Update <updates@vc.fund>", subject: "Q3 investor update reminder", snippet: "Friendly reminder: Your Q3 investor update is due by Feb 10. Need any data from our side?", date: "2026-02-03", read: true, body: "Hi Alex,\n\nJust a friendly reminder that your Q3 investor update is due by Feb 10.\n\nIf you need any portfolio data or metrics from our side, just let me know.\n\nThanks,\nThe VC Team" },
+                    { id: 303, from: "Team Standup <no-reply@company.com>", subject: "Tomorrow's standup moved to 10am", snippet: "Quick note: Standup tomorrow is moved to 10:00 AM due to client call.", date: "2026-02-04", read: true, body: "Team,\n\nQuick update: Tomorrow's standup is moved to 10:00 AM because of a client call overlap.\n\nSee you then!" }
+                ];
+                
+                // Sample personal health data (separate from work)
+                state.movements = [
+                    { id: 401, type: "Morning walk", duration: 25, time: "8:15am", date: new Date().toISOString().split('T')[0] },
+                    { id: 402, type: "Gym - upper body", duration: 50, time: "5:45pm", date: new Date().toISOString().split('T')[0] }
+                ];
+                state.meals = [
+                    { id: 501, time: "8:00am", description: "Greek yogurt + berries + almonds", macros: "~22P • 28C • 14F", macroNumbers: {p:22, c:28, f:14}, date: new Date().toISOString().split('T')[0] },
+                    { id: 502, time: "12:30pm", description: "Grilled chicken salad with quinoa, avocado & olive oil", macros: "~42P • 35C • 28F", macroNumbers: {p:42, c:35, f:28}, date: new Date().toISOString().split('T')[0] }
+                ];
+                
+                // Activity Log for full history & accountability
+                state.activities = [
+                    { id: 601, timestamp: new Date(Date.now() - 1000*60*60*3).toISOString(), text: "Arrived at the gym", category: "Health", source: "voice", location: "Gym" },
+                    { id: 602, timestamp: new Date(Date.now() - 1000*60*60*2).toISOString(), text: "Completed upper body workout", category: "Health", source: "manual", location: "Gym" },
+                    { id: 603, timestamp: new Date(Date.now() - 1000*60*60).toISOString(), text: "Had client strategy call", category: "Work", source: "email", location: "Office" }
+                ];
+                state.winsToday = 3;
+                state.chatHistory = [
+                    { role: "ai", text: "Hey Alex! I'm VISION HUNTER, your ADHD-aware companion. What's coming up for you today? I'm here to help chunk things, celebrate wins, or just listen." }
+                ];
+            }
+            // Ensure arrays exist
+            if (!state.tasks) state.tasks = [];
+            if (!state.ideas) state.ideas = [];
+            if (!state.expenses) state.expenses = [];
+            if (!state.journal) state.journal = {};
+            if (!state.chatHistory) state.chatHistory = [];
+        }
+        
+        function saveState() {
+            localStorage.setItem('lumina_state', JSON.stringify(state));
+            updateStats();
+        }
+        
+        function updateStats() {
+            // Update header stats
+            document.getElementById('wins-today').innerText = state.winsToday || 0;
+            
+            const completed = state.tasks.filter(t => t.completed).length;
+            const total = state.tasks.length || 1;
+            document.getElementById('tasks-completed').innerText = `${completed}/${total}`;
+            
+            document.getElementById('ideas-captured').innerText = state.ideas.length;
+            
+            const weekTotal = state.expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+            document.getElementById('money-spent').innerText = '$' + Math.round(weekTotal);
+        }
+        
+        // Render Tasks
+        function renderTasks() {
+            const container = document.getElementById('tasks-list');
+            container.innerHTML = '';
+            
+            const activeTasks = state.tasks.filter(t => !t.completed).slice(0, 5); // Top 5 for ADHD
+            
+            if (activeTasks.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-slate-400 text-sm">All clear! Add a tiny next action above.</div>`;
+                return;
+            }
+            
+            activeTasks.forEach(task => {
+                const div = document.createElement('div');
+                div.className = `task-item flex items-start gap-x-3 p-3.5 bg-white border border-slate-100 rounded-2xl ${task.completed ? 'opacity-60' : ''}`;
+                
+                const priorityColor = task.priority === 'high' ? 'bg-red-100 text-red-600' : 
+                                     task.priority === 'medium' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600';
+                
+                div.innerHTML = `
+                    <div class="pt-0.5">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                               onchange="toggleTaskComplete(${task.id}, this.checked)"
+                               class="w-4 h-4 accent-indigo-600 mt-0.5 cursor-pointer">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-x-2">
+                            <span class="font-medium text-sm leading-tight">${task.title}</span>
+                            <span class="para-tag ${priorityColor}">${task.priority}</span>
+                            ${task.energy ? `<span class="text-[10px] px-1.5 py-px bg-slate-100 rounded text-slate-500">${task.energy} energy</span>` : ''}
+                        </div>
+                        ${task.project ? `<div class="text-[10px] text-indigo-500 mt-0.5">${task.project}</div>` : ''}
+                        
+                        <div class="flex items-center gap-x-2 mt-2">
+                            <button onclick="breakDownTask(${task.id})" 
+                                    class="text-[10px] flex items-center gap-x-1 px-2.5 py-px bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors">
+                                <i class="fa-solid fa-magic text-xs"></i> 
+                                <span class="font-medium">AI chunk it</span>
+                            </button>
+                            ${task.steps && task.steps.length > 0 ? 
+                                `<span class="text-[10px] text-emerald-600">${task.steps.length} steps ready</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function toggleTaskComplete(id, completed) {
+            const task = state.tasks.find(t => t.id === id);
+            if (!task) return;
+            
+            task.completed = completed;
+            
+            if (completed) {
+                state.winsToday = (state.winsToday || 0) + 1;
+                showToast(`Nice work! +1 win logged. You're building momentum.`);
+                // Gentle celebration
+                setTimeout(() => {
+                    const el = document.getElementById('wins-today');
+                    if (el) el.classList.add('win-celebration');
+                    setTimeout(() => el && el.classList.remove('win-celebration'), 600);
+                }, 200);
+            }
+            
+            saveState();
+            renderTasks();
+            updateStats();
+        }
+        
+        function addNewTask() {
+            const title = prompt("What's the tiniest next action? (keep it under 10 words if possible)");
+            if (!title || title.trim() === '') return;
+            
+            const newTask = {
+                id: Date.now(),
+                title: title.trim(),
+                priority: "medium",
+                energy: "medium",
+                completed: false,
+                project: "Inbox",
+                steps: []
+            };
+            
+            state.tasks.unshift(newTask);
+            saveState();
+            renderTasks();
+            showToast("Task captured! You can chunk it with AI anytime.");
+        }
+        
+        async function breakDownTask(taskId) {
+            const task = state.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+
+            content.innerHTML = `
+                <div class="flex items-center gap-x-3 mb-4">
+                    <i class="fa-solid fa-magic text-indigo-500 text-xl animate-pulse"></i>
+                    <div>
+                        <div class="font-semibold">AI is chunking: "${task.title}"</div>
+                        <div class="text-xs text-slate-500">Thinking through tiny steps…</div>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            let steps;
+            try {
+                const res = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'breakdown', title: task.title })
+                });
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+                steps = data.steps;
+                if (!Array.isArray(steps) || steps.length === 0) throw new Error('Bad response');
+            } catch (err) {
+                console.warn('AI breakdown failed, falling back to local logic:', err);
+                steps = generateBreakdownSteps(task.title);
+            }
+
+            task.steps = steps;
+            
+            content.innerHTML = `
+                <div class="flex items-center gap-x-3 mb-4">
+                    <i class="fa-solid fa-magic text-indigo-500 text-xl"></i>
+                    <div>
+                        <div class="font-semibold">AI Chunked: "${task.title}"</div>
+                        <div class="text-xs text-slate-500">Tiny actionable steps</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-2 mb-5">
+                    ${steps.map((step, i) => `
+                        <div class="flex items-start gap-x-3 p-3 bg-slate-50 rounded-2xl">
+                            <div class="w-5 h-5 flex-shrink-0 mt-px rounded-full bg-white border flex items-center justify-center text-[10px] font-mono text-indigo-500">${i+1}</div>
+                            <div class="text-sm flex-1 pt-px">${step}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="flex gap-x-3">
+                    <button onclick="addStepsAsTasks(${taskId}); closeBreakdownModal()" 
+                            class="flex-1 py-3 text-sm font-semibold bg-indigo-600 text-white rounded-3xl">Add these as sub-tasks</button>
+                    <button onclick="closeBreakdownModal()" class="flex-1 py-3 text-sm font-semibold border border-slate-300 rounded-3xl">Close</button>
+                </div>
+            `;
+        }
+        
+        function generateBreakdownSteps(taskTitle) {
+            // Simple rule-based "AI" breakdown inspired by Goblin.tools
+            const lower = taskTitle.toLowerCase();
+            let steps = [];
+            
+            if (lower.includes('draft') || lower.includes('write') || lower.includes('proposal')) {
+                steps = [
+                    "Open doc and write the ugly first paragraph (5 mins)",
+                    "Bullet the 3 main points you want to make",
+                    "Add rough numbers or examples for each point",
+                    "Run spellcheck + read out loud once",
+                    "Send to one trusted person for quick feedback"
+                ];
+            } else if (lower.includes('research') || lower.includes('crm') || lower.includes('tool')) {
+                steps = [
+                    "Open 3 tabs max: search + 2 review sites",
+                    "List 4 options with 1 pro & 1 con each",
+                    "Pick your top 2 and note pricing",
+                    "Schedule 20-min trial of #1 tomorrow"
+                ];
+            } else if (lower.includes('email') || lower.includes('reply')) {
+                steps = [
+                    "Open the email thread",
+                    "Write 3-sentence reply in notes app first",
+                    "Paste and send (no overthinking)"
+                ];
+            } else {
+                steps = [
+                    "Set a 10-minute timer and just start",
+                    "Write down the absolute smallest first action",
+                    "Do only that first action",
+                    "Celebrate completing it (even if tiny)"
+                ];
+            }
+            return steps;
+        }
+        
+        function addStepsAsTasks(parentTaskId) {
+            const parent = state.tasks.find(t => t.id === parentTaskId);
+            if (!parent || !parent.steps) return;
+            
+            parent.steps.forEach((stepText, index) => {
+                const newTask = {
+                    id: Date.now() + index,
+                    title: stepText,
+                    priority: parent.priority,
+                    energy: parent.energy,
+                    completed: false,
+                    project: parent.project + " (sub)",
+                    steps: []
+                };
+                state.tasks.push(newTask);
+            });
+            
+            // Mark original as having been broken down
+            parent.completed = true; // or keep it as parent
+            
+            saveState();
+            renderTasks();
+            closeBreakdownModal();
+            showToast("Steps added as separate tiny tasks. Much less overwhelming now.");
+        }
+        
+        function closeBreakdownModal() {
+            const modal = document.getElementById('breakdown-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        // Ideas / Second Brain (PARA)
+        function renderIdeas() {
+            const container = document.getElementById('ideas-list');
+            container.innerHTML = '';
+            
+            if (state.ideas.length === 0) {
+                container.innerHTML = `<div class="text-xs text-center py-4 text-slate-400">Your brain dump lives here. Add anything.</div>`;
+                return;
+            }
+            
+            state.ideas.slice(0, 4).forEach(idea => {
+                const div = document.createElement('div');
+                div.className = `idea-card p-3.5 bg-white border border-slate-100 rounded-2xl text-sm flex gap-x-3`;
+                
+                const paraColor = idea.para === 'Project' ? 'bg-indigo-100 text-indigo-700' : 
+                                 idea.para === 'Area' ? 'bg-emerald-100 text-emerald-700' : 
+                                 idea.para === 'Resource' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600';
+                
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <div class="leading-tight pr-1">${idea.content}</div>
+                        <div class="mt-2 flex items-center gap-x-2">
+                            <span class="para-tag ${paraColor}">${idea.para || 'Idea'}</span>
+                            <span class="text-[10px] text-slate-400">${idea.created}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function addNewIdea() {
+            const content = prompt("What's the business idea, thought, or random spark?");
+            if (!content || !content.trim()) return;
+            
+            const para = prompt("Quick categorize (Project / Area / Resource / Archive)?", "Resource") || "Resource";
+            
+            state.ideas.unshift({
+                id: Date.now(),
+                content: content.trim(),
+                para: para,
+                created: new Date().toISOString().split('T')[0]
+            });
+            
+            saveState();
+            renderIdeas();
+            showToast("Idea captured into your Second Brain (PARA style).");
+        }
+        
+        async function organizeIdeasWithAI() {
+            const modalContent = document.getElementById('breakdown-content');
+            const modal = document.getElementById('breakdown-modal');
+            
+            modalContent.innerHTML = `
+                <div class="mb-4">
+                    <div class="font-semibold flex items-center gap-x-2"><i class="fa-solid fa-magic text-purple-500 animate-pulse"></i> AI Organizing Your Ideas (PARA)</div>
+                    <p class="text-xs text-slate-500 mt-1">Analyzing your idea bank and applying the PARA method…</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            let organized;
+            try {
+                const res = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'organize_ideas', ideas: state.ideas })
+                });
+                if (!res.ok) throw new Error('API error');
+                organized = await res.json();
+                if (!organized || !Array.isArray(organized.projects)) throw new Error('Bad response');
+            } catch (err) {
+                console.warn('AI idea organization failed, using fallback:', err);
+                organized = {
+                    projects: [
+                        { content: "Subscription box for ADHD tools", next: "Validate with 5 potential customers this week" },
+                        { content: "1:1 coaching for founders", next: "Create simple landing page outline" }
+                    ],
+                    areas: [{ content: "Content & thought leadership (podcast ideas live here)" }],
+                    resources: [{ content: "All other sparks & references saved for future projects" }]
+                };
+            }
+
+            modalContent.innerHTML = `
+                <div class="mb-4">
+                    <div class="font-semibold flex items-center gap-x-2"><i class="fa-solid fa-magic text-purple-500"></i> AI Organizing Your Ideas (PARA)</div>
+                    <p class="text-xs text-slate-500 mt-1">VISION HUNTER analyzed your idea bank and applied the PARA method + connected related thoughts.</p>
+                </div>
+                
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <div class="font-semibold text-indigo-600 mb-1 flex items-center gap-x-2"><span class="para-tag bg-indigo-100 text-indigo-700">PROJECTS (active goals)</span></div>
+                        <ul class="pl-1 space-y-1 text-xs">
+                            ${organized.projects.map(p => `<li>• ${p.content}${p.next ? ` → Next: ${p.next}` : ''}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-emerald-600 mb-1 flex items-center gap-x-2"><span class="para-tag bg-emerald-100 text-emerald-700">AREAS (ongoing)</span></div>
+                        <ul class="pl-1 text-xs">${(organized.areas || []).map(a => `<li>• ${a.content}</li>`).join('')}</ul>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-amber-600 mb-1 flex items-center gap-x-2"><span class="para-tag bg-amber-100 text-amber-700">RESOURCES</span></div>
+                        <ul class="pl-1 text-xs">${(organized.resources || []).map(r => `<li>• ${r.content}</li>`).join('')}</ul>
+                    </div>
+                </div>
+                
+                <button onclick="closeBreakdownModal(); showToast('Your Second Brain is now neatly organized. You can search or link ideas to tasks in the full app.')" 
+                        class="mt-5 w-full py-3 bg-purple-600 text-white rounded-3xl text-sm font-semibold">Looks great — apply organization</button>
+            `;
+        }
+        
+        // Journal
+        function saveJournalEntry() {
+            const today = new Date().toISOString().split('T')[0];
+            const entry = {
+                win: document.getElementById('journal-win').value.trim(),
+                drain: document.getElementById('journal-drain').value.trim(),
+                notes: document.getElementById('journal-notes').value.trim(),
+                timestamp: new Date().toISOString()
+            };
+            
+            state.journal[today] = entry;
+            
+            if (entry.win) {
+                state.winsToday = (state.winsToday || 0) + 1;
+            }
+            
+            saveState();
+            updateStats();
+            
+            // Clear fields
+            document.getElementById('journal-win').value = '';
+            document.getElementById('journal-drain').value = '';
+            document.getElementById('journal-notes').value = '';
+            
+            showToast("Reflection saved. Great job externalizing your day. This builds self-awareness over time.");
+        }
+        
+        function showJournalHistory() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            let html = `<div class="font-semibold mb-4 flex items-center gap-x-2"><i class="fa-solid fa-history text-emerald-500"></i> Your Reflection History &amp; Insights</div>`;
+            
+            const entries = Object.keys(state.journal).sort().reverse().slice(0, 5);
+            
+            if (entries.length === 0) {
+                html += `<p class="text-sm text-slate-500">No entries yet. Start reflecting daily for powerful patterns.</p>`;
+            } else {
+                entries.forEach(date => {
+                    const e = state.journal[date];
+                    html += `
+                        <div class="mb-4 p-4 bg-emerald-50/70 rounded-2xl text-sm">
+                            <div class="font-medium text-emerald-700 mb-1">${date}</div>
+                            ${e.win ? `<div><span class="font-semibold text-xs">WIN:</span> ${e.win}</div>` : ''}
+                            ${e.drain ? `<div class="mt-1"><span class="font-semibold text-xs">DRAIN:</span> ${e.drain}</div>` : ''}
+                            ${e.notes ? `<div class="mt-1 text-xs text-slate-600">${e.notes}</div>` : ''}
+                        </div>
+                    `;
+                });
+                
+                html += `<div class="text-xs bg-white p-3 rounded-2xl border"><strong>AI Insight (mock):</strong> You consistently note higher energy after movement. Consider adding a 15-min walk as a non-negotiable block.</div>`;
+            }
+            
+            content.innerHTML = html + `<button onclick="closeBreakdownModal()" class="mt-4 w-full py-2.5 border border-slate-300 rounded-3xl text-sm font-medium">Close</button>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        // Money
+        function renderMoney() {
+            const container = document.getElementById('money-recent');
+            container.innerHTML = '';
+            
+            const recent = [...state.expenses].sort((a,b) => b.date.localeCompare(a.date)).slice(0, 3);
+            
+            recent.forEach(exp => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between text-xs py-0.5';
+                div.innerHTML = `
+                    <span>${exp.desc}</span> 
+                    <span class="font-mono text-sky-600">$${exp.amount}</span>
+                `;
+                container.appendChild(div);
+            });
+            
+            // Update total
+            const total = state.expenses.reduce((s, e) => s + e.amount, 0);
+            // already handled in updateStats but we can refresh if needed
+        }
+        
+        function logExpense() {
+            const desc = prompt("What did you spend on? (e.g. 'lunch with client')");
+            if (!desc) return;
+            const amountStr = prompt("Amount? (just number)");
+            const amount = parseFloat(amountStr);
+            if (isNaN(amount)) return alert("Please enter a valid number.");
+            
+            const category = prompt("Category? (Food / Transport / Tools / Misc)", "Misc");
+            
+            state.expenses.unshift({
+                id: Date.now(),
+                amount: amount,
+                desc: desc.trim(),
+                category: category || "Misc",
+                date: new Date().toISOString().split('T')[0]
+            });
+            
+            saveState();
+            renderMoney();
+            updateStats();
+            showToast("Expense logged. No judgment — awareness is the win.");
+        }
+        
+        // Today's Timeline (visual, Tiimo inspired)
+        function renderTodayTimeline() {
+            const container = document.getElementById('today-timeline');
+            container.innerHTML = '';
+            
+            const defaultBlocks = state.todayPlan && state.todayPlan.blocks ? state.todayPlan.blocks : [
+                { time: "8:30", activity: "Morning routine + coffee + light journal", duration: "40m", type: "routine" },
+                { time: "9:15", activity: "Deep work: Investor update draft", duration: "90m", type: "deep" },
+                { time: "11:00", activity: "Admin & quick replies (low energy)", duration: "45m", type: "admin" },
+                { time: "14:30", activity: "Explore 1 idea from bank + tiny next step", duration: "50m", type: "creative" },
+                { time: "17:00", activity: "Review wins + gentle wind down", duration: "25m", type: "review" }
+            ];
+            
+            defaultBlocks.forEach((block, index) => {
+                const div = document.createElement('div');
+                div.className = `timeline-block p-3.5 rounded-2xl border flex flex-col ${block.type === 'deep' ? 'bg-indigo-50 border-indigo-200' : block.type === 'review' ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-200'}`;
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-mono text-xs text-slate-400">${block.time}</div>
+                            <div class="font-medium text-sm leading-tight mt-0.5 pr-1">${block.activity}</div>
+                        </div>
+                        <div class="text-xs px-2 py-0.5 rounded bg-white/70 border text-slate-500 self-start">${block.duration}</div>
+                    </div>
+                    ${block.type === 'deep' ? `<div class="mt-auto pt-2"><button onclick="startFocusTimer(90)" class="text-[10px] flex items-center gap-x-1 text-indigo-600"><i class="fa-solid fa-play fa-xs"></i> <span>Start timer</span></button></div>` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function openDayPlanner() {
+            document.getElementById('planner-modal').classList.remove('hidden');
+            document.getElementById('planner-modal').classList.add('flex');
+        }
+        
+        function closePlannerModal() {
+            document.getElementById('planner-modal').classList.remove('flex');
+            document.getElementById('planner-modal').classList.add('hidden');
+        }
+        
+        function setEnergyLevel(btn, level) {
+            // Deselect all
+            document.querySelectorAll('.energy-btn').forEach(b => b.removeAttribute('data-active'));
+            btn.setAttribute('data-active', 'true');
+            
+            // Store temporarily
+            window.tempEnergy = level;
+        }
+        
+        function saveDayPlan() {
+            const p1 = document.getElementById('priority-1').value || "Work on top priority";
+            const p2 = document.getElementById('priority-2').value || "Movement break";
+            const p3 = document.getElementById('priority-3').value || "Idea exploration";
+            
+            const energy = window.tempEnergy || 'medium';
+            
+            state.todayPlan = {
+                energy: energy,
+                priorities: [p1, p2, p3],
+                blocks: [
+                    { time: "8:30", activity: `Morning routine (${energy} energy)`, duration: "40m", type: "routine" },
+                    { time: "9:15", activity: p1, duration: "75m", type: "deep" },
+                    { time: "11:00", activity: "Admin + replies", duration: "40m", type: "admin" },
+                    { time: "14:00", activity: p3 + " (idea time)", duration: "45m", type: "creative" },
+                    { time: "16:45", activity: "Review wins + tomorrow tiny plan", duration: "20m", type: "review" }
+                ]
+            };
+            
+            // Update current energy display
+            document.getElementById('current-energy').innerText = energy.charAt(0).toUpperCase() + energy.slice(1);
+            
+            closePlannerModal();
+            renderTodayTimeline();
+            saveState();
+            showToast("Beautiful. Your day is now gently structured. Remember: plans are guides, not prisons.");
+        }
+        
+        // AI Chat - Mock but realistic ADHD coach responses
+        function renderChat() {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+            
+            state.chatHistory.forEach(msg => {
+                const div = document.createElement('div');
+                if (msg.role === 'user') {
+                    div.className = 'flex justify-end';
+                    div.innerHTML = `<div class="max-w-[80%] bg-indigo-600 text-white px-4 py-2.5 rounded-3xl rounded-tr-none text-sm">${msg.text}</div>`;
+                } else {
+                    div.className = 'flex';
+                    div.innerHTML = `<div class="max-w-[85%] bg-white border border-slate-200 px-4 py-2.5 rounded-3xl rounded-tl-none text-sm adhd-friendly">${msg.text}</div>`;
+                }
+                container.appendChild(div);
+            });
+            
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            state.chatHistory.push({ role: 'user', text: text });
+            renderChat();
+            input.value = '';
+            
+            await runChatTurn(text);
+        }
+        
+        async function quickPrompt(promptText) {
+            state.chatHistory.push({ role: 'user', text: promptText });
+            renderChat();
+            
+            await runChatTurn(promptText);
+        }
+
+        async function runChatTurn(userText) {
+            state.chatHistory.push({ role: 'ai', text: '…', _pending: true });
+            renderChat();
+
+            let response;
+            try {
+                const historyForApi = state.chatHistory.filter(h => !h._pending);
+                const res = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'chat', message: userText, history: historyForApi })
+                });
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+                response = data.reply;
+                if (!response) throw new Error('Empty response');
+            } catch (err) {
+                console.warn('AI chat failed, falling back to local logic:', err);
+                response = generateAIResponse(userText);
+            }
+
+            // Replace the pending placeholder with the real response
+            const pendingIndex = state.chatHistory.findIndex(h => h._pending);
+            if (pendingIndex !== -1) {
+                state.chatHistory[pendingIndex] = { role: 'ai', text: response };
+            } else {
+                state.chatHistory.push({ role: 'ai', text: response });
+            }
+            renderChat();
+            saveState();
+        }
+        
+        function generateAIResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            
+            if (msg.includes('overwhelm') || msg.includes('overwhelmed') || msg.includes('too much')) {
+                return "I hear the overwhelm loud and clear. Your brain is trying to protect you by freezing. Let's make it tiny: What's ONE microscopic next step you could take in the next 3 minutes? Even 'open the doc' counts. I'll wait while you tell me.";
+            }
+            
+            if (msg.includes('break down') || msg.includes('chunk') || msg.includes('steps')) {
+                return "Perfect — chunking is your superpower unlock. Paste or describe the big scary thing and I'll turn it into 4-6 tiny, dopamine-friendly steps right now (like Goblin.tools Magic ToDo).";
+            }
+            
+            if (msg.includes('plan') || msg.includes('day') || msg.includes('today')) {
+                return "Let's co-create a kind plan. First: On a scale of low / medium / high, how's your energy and focus today? Then tell me your top 1-3 priorities (or I can suggest based on what I know about you). We'll build flexible blocks with buffers.";
+            }
+            
+            if (msg.includes('idea') || msg.includes('business') || msg.includes('thought')) {
+                return "Ideas are gold for you. I've captured it in your Second Brain (PARA style). Want me to: 1) Turn it into a Project with next actions, 2) Link it to existing ideas, or 3) Just park it safely for later?";
+            }
+            
+            if (msg.includes('money') || msg.includes('budget') || msg.includes('spent')) {
+                return "Money stuff can feel heavy. No shame here. Quick win: Log the transaction in the Money section (voice works great in full version). Then we can look at patterns together without judgment. What's one money thing feeling stressful right now?";
+            }
+            
+            if (msg.includes('win') || msg.includes('done') || msg.includes('finished')) {
+                return "YES. Logging wins rewires your brain toward progress instead of the endless to-do list. Tell me the win (big or micro) and I'll celebrate it with you + add it to today's reversed journal.";
+            }
+            
+            // Default gentle, helpful response
+            return "Thanks for sharing that. I'm here with zero judgment. Do you want help: breaking something down, planning the next 2 hours, organizing thoughts/ideas, or just venting and reflecting? I'm ready for whatever your brain needs right now.";
+        }
+        
+        function clearChat() {
+            if (confirm("Clear chat history?")) {
+                state.chatHistory = [{ role: "ai", text: "Chat reset. What's on your mind today?" }];
+                renderChat();
+                saveState();
+            }
+        }
+        
+        // Capture processing
+        function localCaptureTriage(raw) {
+            // Fallback keyword-based categorization, used only if the AI call fails
+            const lower = raw.toLowerCase();
+            let category = "Idea";
+            let actionText = "";
+            
+            if (lower.includes('task') || lower.includes('need to') || lower.includes('remember to') || lower.includes('email') || lower.includes('finish')) {
+                category = "Task";
+                const newTask = {
+                    id: Date.now(),
+                    title: raw.length > 70 ? raw.substring(0, 67) + "..." : raw,
+                    priority: "medium",
+                    energy: "medium",
+                    completed: false,
+                    project: "Inbox",
+                    steps: []
+                };
+                state.tasks.unshift(newTask);
+                actionText = " → Added as a task. You can chunk it with AI.";
+            } else if (lower.includes('idea') || lower.includes('business') || lower.includes('thought') || lower.includes('maybe') || lower.includes('what if')) {
+                category = "Idea";
+                state.ideas.unshift({
+                    id: Date.now(),
+                    content: raw,
+                    para: lower.includes('project') || lower.includes('launch') ? "Project" : "Resource",
+                    created: new Date().toISOString().split('T')[0]
+                });
+                actionText = " → Saved to your Idea Bank (PARA categorized).";
+            } else if (lower.includes('feel') || lower.includes('today') || lower.includes('energy') || lower.includes('anxious') || lower.includes('proud')) {
+                category = "Journal";
+                const today = new Date().toISOString().split('T')[0];
+                if (!state.journal[today]) state.journal[today] = {};
+                state.journal[today].notes = (state.journal[today].notes || '') + "\n" + raw;
+                actionText = " → Added to today's journal reflection.";
+            } else {
+                state.ideas.unshift({ id: Date.now(), content: raw, para: "Resource", created: new Date().toISOString().split('T')[0] });
+                actionText = " → Captured in Second Brain.";
+            }
+            return { category, actionText };
+        }
+
+        async function processCapture() {
+            const input = document.getElementById('capture-input');
+            const raw = input.value.trim();
+            if (!raw) {
+                showToast("Nothing to process yet. Dump your thoughts!");
+                return;
+            }
+
+            let category, actionText;
+
+            try {
+                const res = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'capture', text: raw })
+                });
+                if (!res.ok) throw new Error('API error');
+                const result = await res.json();
+                if (!result || !result.category) throw new Error('Bad response');
+
+                category = result.category;
+
+                if (category === "Task") {
+                    state.tasks.unshift({
+                        id: Date.now(),
+                        title: result.title || (raw.length > 70 ? raw.substring(0, 67) + "..." : raw),
+                        priority: "medium",
+                        energy: "medium",
+                        completed: false,
+                        project: "Inbox",
+                        steps: []
+                    });
+                    actionText = " → Added as a task. You can chunk it with AI.";
+                } else if (category === "Journal") {
+                    const today = new Date().toISOString().split('T')[0];
+                    if (!state.journal[today]) state.journal[today] = {};
+                    state.journal[today].notes = (state.journal[today].notes || '') + "\n" + raw;
+                    actionText = " → Added to today's journal reflection.";
+                } else {
+                    // Idea
+                    category = "Idea";
+                    state.ideas.unshift({
+                        id: Date.now(),
+                        content: raw,
+                        para: result.para || "Resource",
+                        created: new Date().toISOString().split('T')[0]
+                    });
+                    actionText = " → Saved to your Idea Bank (PARA categorized).";
+                }
+            } catch (err) {
+                console.warn('AI capture triage failed, using fallback:', err);
+                const fallback = localCaptureTriage(raw);
+                category = fallback.category;
+                actionText = fallback.actionText;
+            }
+            
+            saveState();
+            renderTasks();
+            renderIdeas();
+            
+            // Show nice feedback
+            const feedback = document.createElement('div');
+            feedback.className = `mt-3 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-2xl flex items-start gap-x-2`;
+            feedback.innerHTML = `<i class="fa-solid fa-check-double mt-0.5"></i> <div><strong>Processed as ${category}.</strong>${actionText}</div>`;
+            
+            const captureSection = input.parentElement;
+            captureSection.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.style.transition = 'all 0.4s ease';
+                feedback.style.opacity = '0';
+                setTimeout(() => feedback.remove(), 300);
+            }, 4200);
+            
+            input.value = '';
+        }
+        
+        function clearCapture() {
+            document.getElementById('capture-input').value = '';
+        }
+        
+        // Focus Timer (ADHD friendly - flexible)
+        let timerInterval = null;
+        
+        function startFocusTimer(minutes = 25) {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            let timeLeft = minutes * 60;
+            
+            content.innerHTML = `
+                <div class="text-center">
+                    <div class="text-xs uppercase tracking-[1.5px] text-indigo-500 font-semibold mb-1">FOCUS SESSION</div>
+                    <div id="timer-display" class="font-mono text-[72px] font-semibold tabular-nums tracking-tighter text-indigo-600 mb-1">${String(Math.floor(timeLeft/60)).padStart(2,'0')}:${String(timeLeft%60).padStart(2,'0')}</div>
+                    <div class="text-sm text-slate-500 mb-6">You only have to focus for this one block. The rest can wait.</div>
+                    
+                    <div class="flex justify-center gap-x-3">
+                        <button id="timer-pause" onclick="pauseTimer()" class="px-8 py-3 bg-white border border-slate-300 rounded-3xl text-sm font-semibold flex items-center gap-x-2"><i class="fa-solid fa-pause"></i> <span>Pause</span></button>
+                        <button onclick="endFocusSession(true)" class="px-8 py-3 bg-emerald-600 text-white rounded-3xl text-sm font-semibold flex items-center gap-x-2"><i class="fa-solid fa-check"></i> <span>Done early / Finish</span></button>
+                    </div>
+                    
+                    <div class="mt-6 text-[10px] text-slate-400">Timer is flexible. ADHD brains sometimes need movement or shorter bursts — adjust anytime.</div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Start timer
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const display = document.getElementById('timer-display');
+                if (display) {
+                    display.innerText = `${String(Math.floor(timeLeft/60)).padStart(2,'0')}:${String(timeLeft%60).padStart(2,'0')}`;
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endFocusSession(false);
+                }
+            }, 1000);
+            
+            window.currentTimer = { timeLeft, interval: timerInterval };
+        }
+        
+        function pauseTimer() {
+            if (window.currentTimer && window.currentTimer.interval) {
+                clearInterval(window.currentTimer.interval);
+                const btn = document.getElementById('timer-pause');
+                if (btn) {
+                    btn.innerHTML = `<i class="fa-solid fa-play"></i> <span>Resume</span>`;
+                    btn.onclick = () => resumeTimer(btn);
+                }
+            }
+        }
+        
+        function resumeTimer(btn) {
+            if (!window.currentTimer) return;
+            let timeLeft = window.currentTimer.timeLeft;
+            
+            window.currentTimer.interval = setInterval(() => {
+                timeLeft--;
+                const display = document.getElementById('timer-display');
+                if (display) display.innerText = `${String(Math.floor(timeLeft/60)).padStart(2,'0')}:${String(timeLeft%60).padStart(2,'0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(window.currentTimer.interval);
+                    endFocusSession(false);
+                }
+                window.currentTimer.timeLeft = timeLeft;
+            }, 1000);
+            
+            btn.innerHTML = `<i class="fa-solid fa-pause"></i> <span>Pause</span>`;
+            btn.onclick = () => pauseTimer();
+        }
+        
+        function endFocusSession(early) {
+            if (window.currentTimer && window.currentTimer.interval) {
+                clearInterval(window.currentTimer.interval);
+            }
+            
+            closeBreakdownModal();
+            
+            const msg = early ? "You did what you could. That's a win." : "Session complete! Your brain just did focused work — celebrate that.";
+            showToast(msg);
+            
+            // Auto log a win
+            state.winsToday = (state.winsToday || 0) + 1;
+            updateStats();
+            saveState();
+            
+            // Gentle prompt
+            setTimeout(() => {
+                if (confirm("Want to quickly log what you accomplished in this session?")) {
+                    const note = prompt("What got done? (even partial progress counts)");
+                    if (note) {
+                        const today = new Date().toISOString().split('T')[0];
+                        if (!state.journal[today]) state.journal[today] = {};
+                        state.journal[today].notes = (state.journal[today].notes || '') + "\nFocus block: " + note;
+                        saveState();
+                    }
+                }
+            }, 1200);
+        }
+        
+        // Utility
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3.5 rounded-3xl text-sm flex items-center gap-x-3 gentle-shadow z-[200]`;
+            toast.innerHTML = `<span>${message}</span>`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.35s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3800);
+        }
+        
+        function quickWin() {
+            const win = prompt("What's one tiny (or big) win from today? Logging it rewires your brain for progress.");
+            if (!win || !win.trim()) return;
+            
+            state.winsToday = (state.winsToday || 0) + 1;
+            updateStats();
+            
+            const today = new Date().toISOString().split('T')[0];
+            if (!state.journal[today]) state.journal[today] = {};
+            state.journal[today].win = (state.journal[today].win || '') + " " + win.trim();
+            
+            saveState();
+            showToast("Win logged! Your reversed journal is getting stronger. Momentum builds from noticing these.");
+        }
+        
+        function showAllTasks() {
+            alert("In the full Lumina app this opens a beautiful full task view with filters, search, project groupings, and AI suggestions. For now, the main list shows your top priorities to avoid overwhelm.");
+        }
+        
+        function showSettings() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="font-semibold text-xl mb-4">Lumina Settings (Prototype)</div>
+                <div class="space-y-4 text-sm">
+                    <div class="p-4 bg-slate-50 rounded-2xl">
+                        <div class="font-medium mb-2">ADHD Preferences</div>
+                        <div class="space-y-2 text-xs">
+                            <label class="flex items-center gap-x-2"><input type="checkbox" checked class="accent-indigo-600"> Use gentle / non-urgent language in AI responses</label>
+                            <label class="flex items-center gap-x-2"><input type="checkbox" checked class="accent-indigo-600"> Prioritize tiny steps &amp; low-energy options</label>
+                            <label class="flex items-center gap-x-2"><input type="checkbox" checked class="accent-indigo-600"> Celebrate micro-wins automatically</label>
+                            <label class="flex items-center gap-x-2"><input type="checkbox" class="accent-indigo-600"> Enable body doubling reminders</label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-medium mb-1">Voice input (full version)</div>
+                        <div class="text-xs text-slate-500">Real-time transcription + auto categorization using Whisper + custom ADHD prompt.</div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 pt-2">This prototype uses localStorage only. Full version: real LLM (Grok/Claude/GPT), cross-device sync, calendar integration, banking read-only, mobile apps.</div>
+                </div>
+                <button onclick="closeBreakdownModal()" class="mt-5 w-full py-3 bg-slate-800 text-white rounded-3xl text-sm font-semibold">Close</button>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        function showProtocolsModal() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="max-h-[70vh] overflow-y-auto pr-2 text-sm adhd-friendly">
+                    <div class="font-semibold text-2xl mb-2">Research-Backed ADHD Protocols &amp; Hacks</div>
+                    <p class="text-xs text-slate-500 mb-5">Synthesized from leading sources (ADDitude, How to ADHD, Tiago Forte PARA, Goblin.tools, Tiimo, Saner.AI research, clinical strategies).</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="font-semibold text-indigo-600">1. Externalize Everything (Second Brain)</div>
+                            <div class="mt-1 text-xs">Get it out of your head immediately. Use quick capture (voice/text). Then organize with <strong>PARA method</strong>: Projects (deadline goals), Areas (ongoing responsibilities like health/money), Resources (reference &amp; ideas), Archives.</div>
+                        </div>
+                        
+                        <div>
+                            <div class="font-semibold text-indigo-600">2. Chunk Ruthlessly + 3-Minute Rule</div>
+                            <div class="mt-1 text-xs">Big tasks paralyze. Break into the smallest possible next physical action. Use Goblin.tools Magic ToDo style. Start with "just 3 minutes" — momentum often carries you further.</div>
+                        </div>
+                        
+                        <div>
+                            <div class="font-semibold text-indigo-600">3. Visual + Time-Blocking (Tiimo style)</div>
+                            <div class="mt-1 text-xs">Time blindness is real. Use visual timelines, icons, color-coded blocks, and built-in timers. Make time tangible. Flexible "frames" instead of rigid hours.</div>
+                        </div>
+                        
+                        <div>
+                            <div class="font-semibold text-indigo-600">4. Reversed To-Do List &amp; Daily Reflection</div>
+                            <div class="mt-1 text-xs">At end of day, log what you DID accomplish (even micro). This counters the "nothing done" feeling and builds evidence of progress. Pair with prompted journaling.</div>
+                        </div>
+                        
+                        <div>
+                            <div class="font-semibold text-indigo-600">5. AI as Non-Judgmental Coach</div>
+                            <div class="mt-1 text-xs">Use conversational AI (like this Lumina Coach) for task breakdown, day planning, idea organization, and gentle accountability. Custom system prompts that understand executive dysfunction, rejection sensitivity, and time blindness.</div>
+                        </div>
+                        
+                        <div>
+                            <div class="font-semibold text-indigo-600">6. Money &amp; Admin: Automate + Visual + Short Sessions</div>
+                            <div class="mt-1 text-xs">Auto-categorize, voice logging, simple dashboards. 10-15 min weekly reviews only. One number focus (e.g. "available to spend this week").</div>
+                        </div>
+                        
+                        <div class="pt-3 border-t text-xs text-slate-500">Lumina is designed as the ultimate integration of all these: one beautiful, low-friction home for your entire life — powered by AI that truly gets ADHD.</div>
+                    </div>
+                </div>
+                <button onclick="closeBreakdownModal()" class="mt-4 w-full py-3 bg-indigo-600 text-white rounded-3xl text-sm font-semibold">Got it — back to building my day</button>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        // ==================== EMAIL FUNCTIONS ====================
+        function showEmailsModal() {
+            const modal = document.getElementById('emails-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            renderEmailList();
+        }
+        
+        function closeEmailsModal() {
+            const modal = document.getElementById('emails-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function renderEmailList() {
+            const container = document.getElementById('email-list');
+            container.innerHTML = '';
+            
+            if (!state.emails || state.emails.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400">No emails yet. New ones will appear here.</div>`;
+                return;
+            }
+            
+            const sorted = [...state.emails].sort((a, b) => b.date.localeCompare(a.date));
+            
+            sorted.forEach(email => {
+                const div = document.createElement('div');
+                div.className = `p-4 rounded-2xl border flex gap-x-4 cursor-pointer transition-all hover:border-indigo-200 ${email.read ? 'bg-white border-slate-100' : 'bg-indigo-50/50 border-indigo-200'}`;
+                div.onclick = () => openEmailDetail(email.id);
+                
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <div class="font-medium text-sm truncate pr-2">${email.from}</div>
+                            <div class="text-[10px] text-slate-400 flex-shrink-0">${email.date}</div>
+                        </div>
+                        <div class="font-semibold text-sm mt-0.5 truncate">${email.subject}</div>
+                        <div class="text-xs text-slate-500 mt-1 line-clamp-2">${email.snippet}</div>
+                    </div>
+                    ${!email.read ? `<div class="w-2 h-2 bg-indigo-500 rounded-full mt-1 flex-shrink-0"></div>` : ''}
+                `;
+                container.appendChild(div);
+            });
+            
+            // Update unread count
+            const unread = state.emails.filter(e => !e.read).length;
+            const countEl = document.getElementById('unread-count');
+            if (countEl) {
+                countEl.innerText = unread > 0 ? unread : '';
+                countEl.style.display = unread > 0 ? 'inline-block' : 'none';
+            }
+        }
+        
+        function openEmailDetail(emailId) {
+            const email = state.emails.find(e => e.id === emailId);
+            if (!email) return;
+            
+            // Mark as read
+            email.read = true;
+            saveState();
+            renderEmailList(); // refresh list
+            
+            const detailModal = document.getElementById('email-detail-modal');
+            const content = document.getElementById('email-detail-content');
+            
+            content.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <div class="text-xs text-slate-500">${email.from}</div>
+                        <div class="font-semibold text-xl">${email.subject}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">${email.date}</div>
+                    </div>
+                    <button onclick="closeEmailDetail()" class="text-2xl leading-none text-slate-400 hover:text-slate-600">&times;</button>
+                </div>
+                
+                <div class="prose prose-sm max-w-none text-sm whitespace-pre-line bg-slate-50 p-5 rounded-2xl mb-5">${email.body}</div>
+                
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="extractEmailToPlanner(${email.id}); closeEmailDetail()" 
+                            class="flex-1 sm:flex-none px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-3xl flex items-center justify-center gap-x-2">
+                        <i class="fa-solid fa-calendar-check"></i> 
+                        <span>AI: Extract to my day plan &amp; tasks</span>
+                    </button>
+                    <button onclick="replyToEmail(${email.id}); closeEmailDetail()" 
+                            class="flex-1 sm:flex-none px-5 py-3 border border-slate-300 hover:bg-slate-50 text-sm font-semibold rounded-3xl flex items-center justify-center gap-x-2">
+                        <i class="fa-solid fa-reply"></i> 
+                        <span>Reply</span>
+                    </button>
+                </div>
+                
+                <p class="text-center text-[10px] mt-4 text-slate-400">In the full Lumina this would also let you forward, archive, or ask the AI to draft a full reply.</p>
+            `;
+            
+            detailModal.classList.remove('hidden');
+            detailModal.classList.add('flex');
+        }
+        
+        function closeEmailDetail() {
+            const modal = document.getElementById('email-detail-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function extractEmailToPlanner(emailId) {
+            const email = state.emails.find(e => e.id === emailId);
+            if (!email) return;
+            
+            // Simple but smart mock extraction (in real version this is LLM parsing)
+            let added = [];
+            
+            // Look for meeting / schedule language
+            if (email.body.toLowerCase().includes('schedule') || email.body.toLowerCase().includes('sync') || email.body.toLowerCase().includes('meet') || email.body.toLowerCase().includes('tue') || email.body.toLowerCase().includes('wed')) {
+                if (state.todayPlan && state.todayPlan.blocks) {
+                    state.todayPlan.blocks.push({
+                        time: "14:00",
+                        activity: `Meeting / sync with ${email.from.split('<')[0].trim()}`,
+                        duration: "30m",
+                        type: "admin"
+                    });
+                    added.push("Added meeting block to today's plan");
+                } else {
+                    // Create basic plan if none exists
+                    state.todayPlan = {
+                        energy: "medium",
+                        priorities: ["Follow up on email"],
+                        blocks: [
+                            { time: "14:00", activity: `Meeting / sync with ${email.from.split('<')[0].trim()}`, duration: "30m", type: "admin" }
+                        ]
+                    };
+                    added.push("Created meeting in today's plan");
+                }
+                renderTodayTimeline();
+            }
+            
+            // Extract action items / tasks
+            if (email.body.toLowerCase().includes('due') || email.body.toLowerCase().includes('reminder') || email.body.toLowerCase().includes('update') || email.body.toLowerCase().includes('next steps')) {
+                const newTask = {
+                    id: Date.now(),
+                    title: `Follow up: ${email.subject}`,
+                    priority: "high",
+                    energy: "medium",
+                    completed: false,
+                    project: "Email",
+                    steps: []
+                };
+                state.tasks.unshift(newTask);
+                added.push("Created high-priority follow-up task");
+                renderTasks();
+            }
+            
+            // Always add a general note / idea if nothing specific
+            if (added.length === 0) {
+                state.ideas.unshift({
+                    id: Date.now(),
+                    content: `From email: ${email.subject} — ${email.snippet}`,
+                    para: "Resource",
+                    created: new Date().toISOString().split('T')[0]
+                });
+                added.push("Saved key points to Idea Bank");
+                renderIdeas();
+            }
+            
+            saveState();
+            updateStats();
+            
+            const msg = added.length > 0 ? added.join(" • ") : "Extracted key info from the email.";
+            showToast(msg + " (ADHD-friendly parsing)");
+            
+            // Close emails modal too for clean flow
+            setTimeout(() => {
+                closeEmailsModal();
+            }, 1200);
+        }
+        
+        function replyToEmail(emailId) {
+            const email = state.emails.find(e => e.id === emailId);
+            closeEmailDetail();
+            
+            // Pre-fill compose with reply
+            setTimeout(() => {
+                showComposeModal();
+                document.getElementById('compose-to').value = email.from;
+                document.getElementById('compose-subject').value = "Re: " + email.subject;
+                document.getElementById('compose-body').value = `Hi ${email.from.split(' ')[0]},\n\nThanks for your email. `;
+            }, 300);
+        }
+        
+        function showComposeModal() {
+            const modal = document.getElementById('compose-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        function closeComposeModal() {
+            const modal = document.getElementById('compose-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function sendEmail() {
+            const to = document.getElementById('compose-to').value.trim();
+            const subject = document.getElementById('compose-subject').value.trim();
+            const body = document.getElementById('compose-body').value.trim();
+            
+            if (!to || !subject) {
+                alert("Please add recipient and subject.");
+                return;
+            }
+            
+            // Mock send - add to emails as "sent" (we'll treat sent as another email for simplicity in prototype)
+            const newEmail = {
+                id: Date.now(),
+                from: "You (Alex)",
+                subject: subject,
+                snippet: body.substring(0, 80) + "...",
+                date: new Date().toISOString().split('T')[0],
+                read: true,
+                body: body
+            };
+            
+            state.emails.unshift(newEmail);
+            saveState();
+            
+            closeComposeModal();
+            showToast("Email sent! (mock) In real version this goes through your Gmail/Outlook.");
+            
+            // Refresh if emails modal is open
+            setTimeout(() => {
+                if (!document.getElementById('emails-modal').classList.contains('hidden')) {
+                    renderEmailList();
+                }
+            }, 500);
+        }
+        
+        function simulateReceiveEmail() {
+            // Add a new realistic email
+            const newEmail = {
+                id: Date.now(),
+                from: "Marketing Team <team@yourcompany.com>",
+                subject: "New lead from your landing page",
+                snippet: "Great news — someone just signed up for the ADHD tools waitlist. Name: Jordan Lee. Want me to forward their details?",
+                date: new Date().toISOString().split('T')[0],
+                read: false,
+                body: "Hi Alex,\n\nGreat news! Someone just signed up for the ADHD tools waitlist through your landing page.\n\nName: Jordan Lee\nEmail: jordan.lee@email.com\n\nWant me to forward their full details or should I reply with next steps?\n\nBest,\nMarketing Team"
+            };
+            
+            state.emails.unshift(newEmail);
+            saveState();
+            renderEmailList();
+            showToast("New email received! Tap it to let AI extract the lead into your tasks.");
+        }
+        
+        // ==================== UNIVERSAL VOICE INPUT ====================
+        let recognition = null;
+        let currentVoiceContext = null; // 'capture', 'journal', 'email-compose', 'chat', etc.
+        let finalTranscript = '';
+        
+        function startVoiceRecording(context = 'capture') {
+            currentVoiceContext = context;
+            
+            // Check browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Voice input works best in Chrome, Edge or Safari. You can still type normally — the full app will have robust voice everywhere.");
+                return;
+            }
+            
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            
+            finalTranscript = '';
+            
+            const modal = document.getElementById('voice-modal');
+            const statusEl = document.getElementById('voice-status');
+            const transcriptEl = document.getElementById('voice-transcript');
+            const micIcon = document.getElementById('voice-mic-icon');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            statusEl.innerText = 'Listening... Speak naturally';
+            transcriptEl.innerText = '';
+            micIcon.classList.add('animate-pulse', 'scale-110');
+            
+            recognition.onresult = (event) => {
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                transcriptEl.innerHTML = `<span class="text-slate-800">${finalTranscript}</span><span class="text-slate-400">${interim}</span>`;
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error', event);
+                statusEl.innerText = 'Sorry, there was a problem listening. Please try again or type instead.';
+                micIcon.classList.remove('animate-pulse', 'scale-110');
+            };
+            
+            recognition.onend = () => {
+                micIcon.classList.remove('animate-pulse', 'scale-110');
+                if (finalTranscript.trim()) {
+                    statusEl.innerText = 'Got it! Processing...';
+                }
+            };
+            
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error(e);
+                showToast("Couldn't start voice. Please allow microphone access.");
+                cancelVoiceRecording();
+            }
+        }
+        
+        function stopVoiceRecording() {
+            if (recognition) {
+                recognition.stop();
+            }
+            
+            const modal = document.getElementById('voice-modal');
+            const transcriptEl = document.getElementById('voice-transcript');
+            const finalText = (transcriptEl.innerText || finalTranscript).trim();
+            
+            if (!finalText) {
+                cancelVoiceRecording();
+                return;
+            }
+            
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            
+            // Route the transcribed text intelligently based on context
+            routeVoiceInput(finalText, currentVoiceContext);
+        }
+        
+        function cancelVoiceRecording() {
+            if (recognition) {
+                recognition.abort();
+            }
+            const modal = document.getElementById('voice-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function routeVoiceInput(text, context) {
+            if (!text) return;
+            
+            // Smart detection: If it sounds like an activity log ("arrived at", "finished", "started", "had lunch", "gym", etc.), auto-log it to Activity + Calendar
+            const activityKeywords = ['arrived', 'finished', 'completed', 'started', 'had ', 'went to', 'gym', 'walk', 'meeting', 'call', 'lunch', 'breakfast', 'dinner'];
+            const isActivity = activityKeywords.some(kw => text.toLowerCase().includes(kw));
+            
+            if (isActivity && context !== 'chat') {
+                logActivity(text, 'Auto-detected', new Date().toISOString());
+                showToast("Activity recorded in your calendar & history!");
+                return;
+            }
+            
+            switch (context) {
+                case 'capture':
+                    // Put into Quick Capture and auto-process
+                    document.getElementById('capture-input').value = text;
+                    showToast("Voice captured! Processing with AI...");
+                    setTimeout(() => {
+                        processCapture();
+                    }, 600);
+                    break;
+                    
+                case 'journal':
+                    // Add to journal notes
+                    const journalNotes = document.getElementById('journal-notes');
+                    if (journalNotes) {
+                        journalNotes.value = (journalNotes.value ? journalNotes.value + ' ' : '') + text;
+                        showToast("Added to your journal reflection.");
+                    }
+                    break;
+                    
+                case 'email-compose':
+                    // Add to email body
+                    const emailBody = document.getElementById('compose-body');
+                    if (emailBody) {
+                        emailBody.value = (emailBody.value ? emailBody.value + '\n\n' : '') + text;
+                        showToast("Voice added to your email draft.");
+                    }
+                    break;
+                    
+                case 'chat':
+                    // Send directly to AI Coach
+                    state.chatHistory.push({ role: 'user', text: text });
+                    renderChat();
+                    setTimeout(() => {
+                        const response = generateAIResponse(text);
+                        state.chatHistory.push({ role: 'ai', text: response });
+                        renderChat();
+                        saveState();
+                    }, 700);
+                    break;
+                    
+                default:
+                    // Default to Quick Capture
+                    document.getElementById('capture-input').value = text;
+                    showToast("Voice note captured! I'll help organize it.");
+                    setTimeout(() => {
+                        processCapture();
+                    }, 500);
+            }
+        }
+        
+        // Add voice button to Quick Capture (we'll enhance it)
+        function addVoiceButtonToCapture() {
+            // This can be called on init if needed. For now the main voice entry is via global button or context buttons.
+        }
+        
+        // ==================== PERSONAL HEALTH & NUTRITION ====================
+        function renderHealthSection() {
+            // Movement
+            const moveContainer = document.getElementById('movement-list');
+            if (moveContainer) {
+                moveContainer.innerHTML = '';
+                const todayMoves = (state.movements || []).filter(m => m.date === new Date().toISOString().split('T')[0]);
+                
+                if (todayMoves.length === 0) {
+                    moveContainer.innerHTML = `<div class="text-xs text-slate-400 py-1">No movement logged yet today. Tap "Log movement".</div>`;
+                } else {
+                    todayMoves.forEach(m => {
+                        const div = document.createElement('div');
+                        div.className = 'flex justify-between items-center p-2.5 bg-rose-50 rounded-2xl text-sm';
+                        div.innerHTML = `
+                            <div>
+                                <span class="font-medium">${m.type}</span> 
+                                <span class="text-xs text-rose-500">• ${m.duration} min</span>
+                            </div>
+                            <div class="text-xs text-rose-400">${m.time}</div>
+                        `;
+                        moveContainer.appendChild(div);
+                    });
+                }
+                
+                // Update summary
+                const totalMin = todayMoves.reduce((sum, m) => sum + (m.duration || 0), 0);
+                const summaryEl = document.getElementById('movement-summary');
+                if (summaryEl) summaryEl.innerText = `${totalMin} min • ${todayMoves.length} activities`;
+            }
+
+            // Meals + Macros
+            const mealContainer = document.getElementById('meals-list');
+            if (mealContainer) {
+                mealContainer.innerHTML = '';
+                const todayMeals = (state.meals || []).filter(m => m.date === new Date().toISOString().split('T')[0]);
+                
+                if (todayMeals.length === 0) {
+                    mealContainer.innerHTML = `<div class="text-xs text-slate-400 py-1">No meals logged yet. Tap "Log meal".</div>`;
+                } else {
+                    todayMeals.forEach(m => {
+                        const div = document.createElement('div');
+                        div.className = 'p-2.5 bg-emerald-50 rounded-2xl text-sm';
+                        div.innerHTML = `
+                            <div class="flex justify-between">
+                                <div><span class="font-medium">${m.time}</span> — ${m.description}</div>
+                                <div class="text-xs text-emerald-500 font-mono">${m.macros}</div>
+                            </div>
+                        `;
+                        mealContainer.appendChild(div);
+                    });
+                }
+            }
+            
+            updateMacroSummary();
+        }
+        
+        function updateMacroSummary() {
+            const todayMeals = (state.meals || []).filter(m => m.date === new Date().toISOString().split('T')[0]);
+            let totalP = 0, totalC = 0, totalF = 0;
+            
+            todayMeals.forEach(m => {
+                if (m.macroNumbers) {
+                    totalP += m.macroNumbers.p || 0;
+                    totalC += m.macroNumbers.c || 0;
+                    totalF += m.macroNumbers.f || 0;
+                }
+            });
+            
+            const summaryEl = document.getElementById('macros-summary');
+            if (summaryEl) {
+                summaryEl.innerText = `P ${Math.round(totalP)}g • C ${Math.round(totalC)}g • F ${Math.round(totalF)}g`;
+            }
+        }
+        
+        function logMovement() {
+            const type = prompt("What movement? (e.g. Gym weights, 30-min walk, Yoga, Run)", "Walk");
+            if (!type) return;
+            const durationStr = prompt("How many minutes?", "30");
+            const duration = parseInt(durationStr) || 30;
+            const time = prompt("What time? (e.g. 8:30am)", new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
+            
+            if (!state.movements) state.movements = [];
+            
+            state.movements.unshift({
+                id: Date.now(),
+                type: type,
+                duration: duration,
+                time: time,
+                date: new Date().toISOString().split('T')[0],
+                notes: ""
+            });
+            
+            saveState();
+            renderHealthSection();
+            showToast("Movement logged. Great for energy & focus!");
+        }
+        
+        async function logMeal() {
+            const time = prompt("What time did you eat? (e.g. 12:45pm)", new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
+            if (!time) return;
+            
+            const description = prompt("What did you eat? (be as specific as you can — e.g. grilled chicken salad with olive oil, quinoa, avocado)", "");
+            if (!description) return;
+            
+            showToast("Estimating macros with AI…");
+
+            let macros;
+            try {
+                const res = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'macros', description })
+                });
+                if (!res.ok) throw new Error('API error');
+                macros = await res.json();
+                if (!macros || !macros.numbers) throw new Error('Bad response');
+            } catch (err) {
+                console.warn('AI macro estimation failed, using fallback:', err);
+                macros = estimateMacros(description);
+            }
+            
+            if (!state.meals) state.meals = [];
+            
+            state.meals.unshift({
+                id: Date.now(),
+                time: time,
+                description: description,
+                macros: macros.display,
+                macroNumbers: macros.numbers,
+                date: new Date().toISOString().split('T')[0]
+            });
+            
+            saveState();
+            renderHealthSection();
+            showToast(`Meal logged. AI estimate: ${macros.display}`);
+        }
+        
+        function estimateMacros(description) {
+            const lower = description.toLowerCase();
+            let p = 25, c = 40, f = 15; // base reasonable meal
+            
+            // Protein sources
+            if (lower.includes('chicken') || lower.includes('turkey')) p += 20;
+            if (lower.includes('salmon') || lower.includes('fish') || lower.includes('tuna')) { p += 18; f += 8; }
+            if (lower.includes('eggs') || lower.includes('egg')) p += 12;
+            if (lower.includes('protein') || lower.includes('shake') || lower.includes('whey')) p += 25;
+            if (lower.includes('tofu') || lower.includes('lentil') || lower.includes('beans')) p += 12;
+            
+            // Carbs
+            if (lower.includes('rice') || lower.includes('quinoa') || lower.includes('pasta')) c += 35;
+            if (lower.includes('bread') || lower.includes('toast')) c += 25;
+            if (lower.includes('oats') || lower.includes('oatmeal')) c += 30;
+            if (lower.includes('fruit') || lower.includes('banana') || lower.includes('apple')) c += 20;
+            
+            // Fats
+            if (lower.includes('avocado')) f += 15;
+            if (lower.includes('olive oil') || lower.includes('nuts') || lower.includes('almond')) f += 12;
+            if (lower.includes('cheese')) f += 10;
+            
+            // Adjustments for "light" or "big"
+            if (lower.includes('salad') || lower.includes('light')) { c -= 10; f -= 5; }
+            if (lower.includes('large') || lower.includes('big') || lower.includes('bowl')) { p += 10; c += 15; }
+            
+            // Clamp reasonable values
+            p = Math.max(10, Math.min(70, p));
+            c = Math.max(10, Math.min(90, c));
+            f = Math.max(5, Math.min(45, f));
+            
+            return {
+                display: `~${Math.round(p)}P • ${Math.round(c)}C • ${Math.round(f)}F`,
+                numbers: { p: Math.round(p), c: Math.round(c), f: Math.round(f) }
+            };
+        }
+        
+        function showDailyHealthSummary() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            const today = new Date().toISOString().split('T')[0];
+            const moves = (state.movements || []).filter(m => m.date === today);
+            const meals = (state.meals || []).filter(m => m.date === today);
+            
+            let html = `<div class="font-semibold text-xl mb-4 flex items-center gap-x-2"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Today's Personal Health Summary</div>`;
+            
+            html += `<div class="mb-4"><div class="font-medium text-rose-600 mb-1">Movement</div>`;
+            if (moves.length === 0) {
+                html += `<div class="text-sm text-slate-500">No movement logged yet. Your body will thank you for even 10 minutes.</div>`;
+            } else {
+                moves.forEach(m => {
+                    html += `<div class="text-sm py-1">• ${m.time} — ${m.type} (${m.duration} min)</div>`;
+                });
+            }
+            html += `</div>`;
+            
+            html += `<div class="mb-4"><div class="font-medium text-emerald-600 mb-1">Meals &amp; Estimated Macros</div>`;
+            if (meals.length === 0) {
+                html += `<div class="text-sm text-slate-500">No meals logged. Logging helps you notice patterns in energy.</div>`;
+            } else {
+                let totalP = 0, totalC = 0, totalF = 0;
+                meals.forEach(m => {
+                    html += `<div class="flex justify-between text-sm py-1"><span>${m.time} — ${m.description}</span> <span class="font-mono text-emerald-500">${m.macros}</span></div>`;
+                    if (m.macroNumbers) {
+                        totalP += m.macroNumbers.p || 0;
+                        totalC += m.macroNumbers.c || 0;
+                        totalF += m.macroNumbers.f || 0;
+                    }
+                });
+                html += `<div class="mt-2 pt-2 border-t font-medium">Daily total ≈ ${Math.round(totalP)}g protein • ${Math.round(totalC)}g carbs • ${Math.round(totalF)}g fat</div>`;
+            }
+            html += `</div>`;
+            
+            html += `<div class="text-xs bg-white p-3 rounded-2xl border"><strong>AI Insight:</strong> You tend to have more steady energy when you log movement before 10am and include protein at lunch.</div>`;
+            
+            content.innerHTML = html + `<button onclick="closeBreakdownModal()" class="mt-5 w-full py-3 bg-rose-600 text-white rounded-3xl text-sm font-semibold">Close</button>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        // ==================== ACTIVITY LOG & ACCOUNTABILITY ====================
+        function logActivity(text, category = "General", timestamp = null) {
+            if (!state.activities) state.activities = [];
+            
+            const now = timestamp ? new Date(timestamp) : new Date();
+            
+            // === Automated Location Tagging ===
+            let location = null;
+            const lowerText = text.toLowerCase();
+            
+            if (lowerText.includes('gym')) location = "Gym";
+            else if (lowerText.includes('home')) location = "Home";
+            else if (lowerText.includes('office') || lowerText.includes('work')) location = "Office";
+            else if (lowerText.includes('cafe') || lowerText.includes('coffee') || lowerText.includes('starbucks')) location = "Cafe";
+            else if (lowerText.includes('park') || lowerText.includes('walk')) location = "Park / Outdoors";
+            else if (lowerText.includes('client') || lowerText.includes('meeting')) location = "Client / Meeting";
+            
+            const activity = {
+                id: Date.now(),
+                timestamp: now.toISOString(),
+                text: text,
+                category: category,
+                source: "voice",
+                location: location   // Automated location tag
+            };
+            
+            state.activities.unshift(activity);
+            saveState();
+            
+            // Add to today's visual timeline with location
+            try {
+                if (state.todayPlan && state.todayPlan.blocks) {
+                    const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    let displayText = text;
+                    if (location) displayText += ` @ ${location}`;
+                    
+                    state.todayPlan.blocks.push({
+                        time: timeStr,
+                        activity: displayText,
+                        duration: "—",
+                        type: category.toLowerCase().includes('health') ? 'health' : 'admin'
+                    });
+                    renderTodayTimeline();
+                }
+            } catch(e) {}
+            
+            // Refresh health section if relevant
+            if (category === "Health" || lowerText.includes('gym') || lowerText.includes('walk')) {
+                renderHealthSection();
+            }
+        }
+        
+        function showSignUpModal() {
+            document.getElementById('signup-modal').classList.remove('hidden');
+            document.getElementById('signup-modal').classList.add('flex');
+        }
+        
+        function hideSignUpModal() {
+            document.getElementById('signup-modal').classList.remove('flex');
+            document.getElementById('signup-modal').classList.add('hidden');
+        }
+        
+        function completeSignUp() {
+            console.log('completeSignUp called');
+            
+            try {
+                // Hide signup modal
+                const signupModal = document.getElementById('signup-modal');
+                if (signupModal) {
+                    signupModal.classList.remove('flex');
+                    signupModal.classList.add('hidden');
+                }
+                
+                // Hide landing page
+                const landing = document.getElementById('landing-page');
+                if (landing) {
+                    landing.classList.add('hidden');
+                    console.log('Landing page hidden');
+                }
+                
+                // Show main app
+                const mainApp = document.getElementById('main-app');
+                if (mainApp) {
+                    mainApp.classList.remove('hidden');
+                    console.log('Main app shown');
+                } else {
+                    console.error('main-app element not found!');
+                }
+                
+                // Show welcome message
+                setTimeout(() => {
+                    showToast("Welcome to VISION HUNTER.ai! Your 7-day free trial has started.");
+                }, 600);
+                
+                // Go to Dashboard
+                switchTab('today');
+                
+            } catch (error) {
+                console.error('Error in completeSignUp:', error);
+                alert('There was an error signing up. Please refresh the page and try again.');
+            }
+        }
+        
+        // ==================== NEW VISION-BASED VIEWS ====================
+        
+        function showTodayView() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <div class="font-semibold text-3xl">Good morning, Alex.</div>
+                            <div class="text-slate-500">Let's make today feel manageable.</div>
+                        </div>
+                        <button onclick="closeBreakdownModal()" class="text-sm px-4 py-2 border rounded-3xl">Close</button>
+                    </div>
+
+                    <!-- Morning Energy Check-in -->
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5 mb-5">
+                        <div class="font-medium mb-3">How's your energy right now?</div>
+                        <div class="flex gap-3">
+                            <button onclick="logEnergy('High')" class="flex-1 py-3 bg-emerald-100 text-emerald-700 rounded-3xl font-medium">High</button>
+                            <button onclick="logEnergy('Medium')" class="flex-1 py-3 bg-amber-100 text-amber-700 rounded-3xl font-medium">Medium</button>
+                            <button onclick="logEnergy('Low')" class="flex-1 py-3 bg-red-100 text-red-700 rounded-3xl font-medium">Low</button>
+                        </div>
+                    </div>
+
+                    <!-- Today's Live Activity -->
+                    <div class="mb-5">
+                        <div class="font-semibold mb-3 flex items-center justify-between">
+                            <span>Today's Activity</span>
+                            <span class="text-xs px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full">Live</span>
+                        </div>
+                        <div id="today-activity-feed" class="space-y-2 text-sm">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <button onclick="startVoiceFromToday()" 
+                            class="w-full py-4 bg-black text-white rounded-3xl font-semibold flex items-center justify-center gap-x-2">
+                        <i class="fa-solid fa-microphone"></i> 
+                        <span>Speak what you just did</span>
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Populate today's activity
+            setTimeout(() => {
+                const feed = document.getElementById('today-activity-feed');
+                if (feed && state.activities && state.activities.length > 0) {
+                    feed.innerHTML = state.activities.slice(0, 5).map(act => {
+                        const time = new Date(act.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                        const loc = act.location ? ` @ ${act.location}` : '';
+                        return `<div class="p-3 bg-white border rounded-2xl flex justify-between"><div>${act.text}${loc}</div><div class="text-xs text-slate-400">${time}</div></div>`;
+                    }).join('');
+                } else {
+                    feed.innerHTML = `<div class="text-sm text-slate-500 p-3">No activity logged yet today. Use Voice to start.</div>`;
+                }
+            }, 100);
+        }
+
+        function logEnergy(level) {
+            showToast(`Energy logged as ${level}. Thank you.`);
+            // In real version this would save to state
+        }
+
+        function startVoiceFromToday() {
+            closeBreakdownModal();
+            setTimeout(() => {
+                showVoiceHub();
+            }, 300);
+        }
+
+        function showHistoryView() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="font-semibold text-3xl">History &amp; Accountability</div>
+                        <button onclick="closeBreakdownModal()" class="text-sm px-4 py-2 border rounded-3xl">Close</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                            <div class="font-medium mb-2">This Week</div>
+                            <div class="text-4xl font-semibold">47 activities</div>
+                            <div class="text-sm text-emerald-600 mt-1">↑ 12 from last week</div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                            <div class="font-medium mb-2">Top Category</div>
+                            <div class="text-4xl font-semibold">Deep Work</div>
+                            <div class="text-sm text-slate-500 mt-1">18 hours this week</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="font-medium mb-3">Recent Activity</div>
+                        <div class="space-y-2 text-sm max-h-[300px] overflow-auto">
+                            ${(state.activities || []).slice(0, 8).map(act => {
+                                const time = new Date(act.timestamp).toLocaleDateString();
+                                const loc = act.location ? ` • ${act.location}` : '';
+                                return `<div class="p-3 bg-white border rounded-2xl flex justify-between"><div>${act.text}${loc}</div><div class="text-xs text-slate-400">${time}</div></div>`;
+                            }).join('') || '<div class="text-slate-500 p-4">No activity yet. Start logging with Voice.</div>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function showVoiceHub() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-20 h-20 mx-auto mb-6 bg-black rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-microphone text-white text-4xl"></i>
+                    </div>
+                    <div class="font-semibold text-2xl mb-2">Voice Capture</div>
+                    <div class="text-slate-500 mb-8">Speak naturally. We'll organize everything.</div>
+                    
+                    <button onclick="simulateVoiceCapture()" 
+                            class="px-10 py-4 bg-black text-white rounded-3xl font-semibold text-lg flex items-center gap-x-3 mx-auto">
+                        <i class="fa-solid fa-microphone"></i>
+                        <span>Start Recording</span>
+                    </button>
+                    
+                    <div class="mt-8 text-xs text-slate-500 max-w-xs mx-auto">
+                        Try saying: "Just finished client strategy call at the office"
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function simulateVoiceCapture() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="animate-pulse mb-4">
+                        <i class="fa-solid fa-microphone text-6xl text-black"></i>
+                    </div>
+                    <div class="font-medium mb-2">Listening...</div>
+                    <div class="text-sm text-slate-500">Speak now</div>
+                    
+                    <button onclick="processSimulatedVoice()" 
+                            class="mt-8 px-8 py-3 bg-emerald-600 text-white rounded-3xl">
+                        Simulate Voice Input
+                    </button>
+                </div>
+            `;
+        }
+
+        function processSimulatedVoice() {
+            closeBreakdownModal();
+            
+            // Simulate voice input
+            const sampleInputs = [
+                "Just finished client strategy call at the office",
+                "Arrived at the gym here",
+                "Completed deep work block on proposal",
+                "Had lunch and went for a short walk"
+            ];
+            
+            const randomInput = sampleInputs[Math.floor(Math.random() * sampleInputs.length)];
+            
+            // Log the activity
+            if (!state.activities) state.activities = [];
+            const now = new Date();
+            
+            let location = null;
+            const lower = randomInput.toLowerCase();
+            if (lower.includes('gym')) location = "Gym";
+            else if (lower.includes('office')) location = "Office";
+            else if (lower.includes('walk')) location = "Park / Outdoors";
+            
+            state.activities.unshift({
+                id: Date.now(),
+                timestamp: now.toISOString(),
+                text: randomInput,
+                category: "General",
+                source: "voice",
+                location: location
+            });
+            
+            showToast("Voice captured and logged. Great work.");
+            
+            // Refresh today view if open
+            setTimeout(() => {
+                showTodayView();
+            }, 1200);
+        }
+
+        function showMeView() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div>
+                    <div class="font-semibold text-3xl mb-6">Me &amp; Insights</div>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                            <div class="font-medium mb-3">Energy Patterns</div>
+                            <div class="text-sm text-slate-600">You tend to have higher energy in the mornings. Try scheduling deep work before 11am.</div>
+                        </div>
+                        
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                            <div class="font-medium mb-3">This Month</div>
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                    <div class="text-3xl font-semibold">142</div>
+                                    <div class="text-xs text-slate-500">Activities Logged</div>
+                                </div>
+                                <div>
+                                    <div class="text-3xl font-semibold">68%</div>
+                                    <div class="text-xs text-slate-500">Deep Work</div>
+                                </div>
+                                <div>
+                                    <div class="text-3xl font-semibold">19</div>
+                                    <div class="text-xs text-slate-500">Wins Captured</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function showSettingsDashboard() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="font-semibold text-3xl mb-6 flex items-center gap-x-3">
+                    <i class="fa-solid fa-user-cog text-slate-600"></i> 
+                    Account &amp; Subscription
+                </div>
+                
+                <div class="space-y-8">
+                    <!-- Account Info -->
+                    <div>
+                        <div class="font-medium mb-3">Account</div>
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-semibold">Alex Rivera</div>
+                                    <div class="text-sm text-slate-500">alex@visionhunter.ai</div>
+                                </div>
+                                <button class="text-sm px-4 py-2 border border-slate-300 rounded-3xl">Edit Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Subscription -->
+                    <div>
+                        <div class="font-medium mb-3">Subscription</div>
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="font-semibold text-lg">VISION HUNTER Pro</div>
+                                    <div class="text-emerald-600 font-medium">$29 / month</div>
+                                    <div class="text-xs text-slate-500 mt-1">Next billing: August 5, 2026</div>
+                                </div>
+                                <div class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">Active • Trial ends in 6 days</div>
+                            </div>
+                            
+                            <div class="flex gap-x-3">
+                                <button class="flex-1 py-3 border border-slate-300 rounded-3xl text-sm font-medium">Change Plan</button>
+                                <button onclick="cancelSubscription()" class="flex-1 py-3 text-red-600 border border-red-200 hover:bg-red-50 rounded-3xl text-sm font-medium">Cancel Subscription</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing History -->
+                    <div>
+                        <div class="font-medium mb-3 flex items-center justify-between">
+                            <span>Billing History</span>
+                            <button class="text-xs px-3 py-1 border border-slate-300 rounded-2xl hover:bg-slate-50">Download all invoices</button>
+                        </div>
+                        
+                        <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b bg-slate-50">
+                                        <th class="text-left px-6 py-3 font-medium text-slate-600">Date</th>
+                                        <th class="text-left px-6 py-3 font-medium text-slate-600">Description</th>
+                                        <th class="text-right px-6 py-3 font-medium text-slate-600">Amount</th>
+                                        <th class="text-center px-6 py-3 font-medium text-slate-600">Status</th>
+                                        <th class="w-10"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y">
+                                    <tr>
+                                        <td class="px-6 py-4 text-slate-600">Jul 5, 2026</td>
+                                        <td class="px-6 py-4 font-medium">VISION HUNTER Pro - Monthly</td>
+                                        <td class="px-6 py-4 text-right font-mono">$29.00</td>
+                                        <td class="px-6 py-4 text-center"><span class="px-2.5 py-0.5 text-xs bg-emerald-100 text-emerald-700 rounded-full">Paid</span></td>
+                                        <td class="px-6 py-4"><button class="text-indigo-600 hover:text-indigo-700 text-xs">PDF</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 text-slate-600">Jun 5, 2026</td>
+                                        <td class="px-6 py-4 font-medium">VISION HUNTER Pro - Monthly</td>
+                                        <td class="px-6 py-4 text-right font-mono">$29.00</td>
+                                        <td class="px-6 py-4 text-center"><span class="px-2.5 py-0.5 text-xs bg-emerald-100 text-emerald-700 rounded-full">Paid</span></td>
+                                        <td class="px-6 py-4"><button class="text-indigo-600 hover:text-indigo-700 text-xs">PDF</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 text-slate-600">May 5, 2026</td>
+                                        <td class="px-6 py-4 font-medium">VISION HUNTER Pro - Monthly</td>
+                                        <td class="px-6 py-4 text-right font-mono">$29.00</td>
+                                        <td class="px-6 py-4 text-center"><span class="px-2.5 py-0.5 text-xs bg-emerald-100 text-emerald-700 rounded-full">Paid</span></td>
+                                        <td class="px-6 py-4"><button class="text-indigo-600 hover:text-indigo-700 text-xs">PDF</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="text-xs text-slate-500 text-center">
+                        Questions? Email support@visionhunter.ai
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        function cancelSubscription() {
+            if (confirm("Are you sure you want to cancel your subscription?")) {
+                alert("Subscription cancelled. You'll retain access until the end of your billing period.");
+                closeBreakdownModal();
+            }
+        }
+        
+        function showActivityHistory() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            const activities = state.activities || [];
+            
+            let html = `
+                <div class="font-semibold text-2xl mb-2 flex items-center gap-x-2">
+                    <i class="fa-solid fa-history text-indigo-500"></i> 
+                    Activity History &amp; Accountability
+                </div>
+                <p class="text-sm text-slate-500 mb-4">Everything you've done — voice logged, tasks completed, meals, movement. This is your real data for accountability.</p>
+            `;
+            
+            if (activities.length === 0) {
+                html += `<div class="text-center py-8 text-slate-400">No activities logged yet. Start speaking naturally ("Arrived at the gym", "Finished client call") and it will be recorded automatically.</div>`;
+            } else {
+                // Group by date for nice display
+                const grouped = {};
+                activities.forEach(act => {
+                    const date = act.timestamp.split('T')[0];
+                    if (!grouped[date]) grouped[date] = [];
+                    grouped[date].push(act);
+                });
+                
+                Object.keys(grouped).sort().reverse().slice(0, 7).forEach(date => {
+                    html += `<div class="mb-4"><div class="font-medium text-sm mb-1.5 text-indigo-600">${date}</div>`;
+                    grouped[date].forEach(act => {
+                        const time = new Date(act.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                        const locTag = act.location ? `<span class="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-600">${act.location}</span>` : '';
+                        html += `
+                            <div class="flex items-start gap-x-3 p-3 bg-white border border-slate-100 rounded-2xl mb-1.5 text-sm">
+                                <div class="font-mono text-xs text-slate-400 w-14 flex-shrink-0 pt-0.5">${time}</div>
+                                <div class="flex-1">${act.text} ${locTag}</div>
+                                <div class="text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600 self-start">${act.category}</div>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                });
+            }
+            
+            // Pie Chart Section
+            html += `
+                <div class="mt-6 pt-5 border-t">
+                    <div class="font-semibold mb-3">This Week's Activity Breakdown</div>
+                    <div class="flex justify-center">
+                        <canvas id="activity-pie-chart" width="280" height="280"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-2">Clear visual proof of where your time and energy actually went.</p>
+                </div>
+            `;
+            
+            content.innerHTML = html + `<button onclick="closeBreakdownModal(); renderHealthSection();" class="mt-5 w-full py-3 bg-indigo-600 text-white rounded-3xl text-sm font-semibold">Close</button>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Draw pie chart after modal is visible
+            setTimeout(() => {
+                drawActivityPieChart();
+            }, 300);
+        }
+        
+        function drawActivityPieChart() {
+            const canvas = document.getElementById('activity-pie-chart');
+            if (!canvas || !window.Chart) return;
+            
+            const activities = state.activities || [];
+            const categoryCounts = {};
+            
+            activities.forEach(act => {
+                const cat = act.category || "General";
+                categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+            });
+            
+            const labels = Object.keys(categoryCounts);
+            const data = Object.values(categoryCounts);
+            const colors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
+            
+            new Chart(canvas, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 15, font: { size: 12 } }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Add a global button for Activity History in the bottom bar or we can call it from health section
+        // For now it's accessible via the health zone "Full day view" or we can add a dedicated button later.
+        
+        // ==================== END ACTIVITY & ACCOUNTABILITY ====================
+        
+        // Initialize everything
+        function initializeApp() {
+            initializeTailwind();
+            loadState();
+            
+            // Render all sections
+            renderChat();
+            renderTasks();
+            renderIdeas();
+            renderTodayTimeline();
+            renderMoney();
+            renderHealthSection();
+            updateStats();
+            
+            // Set initial energy
+            document.getElementById('current-energy').innerText = "Medium";
+            
+            // Activate Today tab by default (new vision)
+            const todayTab = document.getElementById('tab-today');
+            if (todayTab) todayTab.classList.add('active-tab');
+            
+            // Seed a welcome if first time
+            if (state.chatHistory.length === 0) {
+                state.chatHistory.push({ role: "ai", text: "Hey Alex! I'm VISION HUNTER — your personal ADHD life companion. I help with planning without overwhelm, capturing every spark, breaking things into steps that actually feel doable, and celebrating the wins your brain often forgets. What's one thing on your mind right now?" });
+                renderChat();
+            }
+            
+            // Keyboard shortcut hint
+            console.log('%c[Lumina] Prototype ready. Try voice in full version. All data local.', 'color:#64748b');
+            
+            // Bonus: Auto-save on visibility change
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') saveState();
+            });
+            
+            // Easter egg: Press "?" to open AI chat focus
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "?" && document.activeElement.tagName === "BODY") {
+                    e.preventDefault();
+                    document.getElementById('chat-input').focus();
+                }
+            });
+            
+            // Initial gentle nudge
+            setTimeout(() => {
+                const nudge = document.createElement('div');
+                nudge.style.cssText = 'position:fixed;bottom:22px;right:22px;background:white;border:1px solid #e2e8f0;border-radius:9999px;padding:6px 14px 6px 10px;box-shadow:0 10px 15px -3px rgb(15 23 42 / 0.1);font-size:11px;display:flex;align-items:center;gap:6px;color:#475569';
+                nudge.innerHTML = `<i class="fa-solid fa-robot text-indigo-400"></i> <span>Try the VISION HUNTER Coach — it really understands ADHD brains.</span>`;
+                document.body.appendChild(nudge);
+                setTimeout(() => {
+                    nudge.style.transition = 'all .4s ease';
+                    nudge.style.opacity = '0';
+                    setTimeout(() => nudge.parentNode.removeChild(nudge), 400);
+                }, 5200);
+            }, 8500);
+            
+            // Floating Universal Voice Button (ADHD-friendly quick access from anywhere)
+            const voiceFab = document.createElement('button');
+            voiceFab.className = 'fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-full shadow-xl flex items-center justify-center z-[90] hover:scale-105 active:scale-95 transition-transform';
+            voiceFab.innerHTML = `<i class="fa-solid fa-microphone text-2xl"></i>`;
+            voiceFab.title = "Voice note anywhere — speaks → transcribes → organizes (VISION HUNTER.ai)";
+            voiceFab.onclick = () => startVoiceRecording('capture');
+            document.body.appendChild(voiceFab);
+        }
+        
+        // ==================== TAB NAVIGATION ====================
+        let currentTab = 'dashboard';
+
+        function switchTab(tab) {
+            try {
+                // Remove active from all tabs
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+                
+                // Add active to clicked tab
+                const activeBtn = document.getElementById('tab-' + tab);
+                if (activeBtn) activeBtn.classList.add('active-tab');
+
+                currentTab = tab;
+
+                const landing = document.getElementById('landing-page');
+                const mainApp = document.getElementById('main-app');
+                
+                if (landing) landing.classList.add('hidden');
+                if (mainApp) mainApp.classList.remove('hidden');
+
+                // New vision-based tabs
+                if (tab === 'today') {
+                    showTodayView();
+                } 
+                else if (tab === 'history') {
+                    showHistoryView();
+                } 
+                else if (tab === 'voice') {
+                    showVoiceHub();
+                } 
+                else if (tab === 'me') {
+                    showMeView();
+                }
+            } catch (error) {
+                console.error('Error switching tab:', error);
+            }
+        }
+
+        function showCalendarDashboard() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <div class="font-semibold text-3xl flex items-center gap-x-3">
+                            <i class="fa-solid fa-calendar-alt text-indigo-500"></i> 
+                            Calendar Dashboard
+                        </div>
+                        <p class="text-slate-500">Visual overview of your day &amp; history</p>
+                    </div>
+                    <button onclick="closeBreakdownModal()" class="text-sm px-4 py-2 border border-slate-300 rounded-3xl">Close</button>
+                </div>
+
+                <!-- Visual Today's Timeline -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="font-semibold">Today's Visual Flow</div>
+                        <div class="text-xs px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full">Live</div>
+                    </div>
+                    <div id="calendar-today-timeline" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                        <div class="text-xs text-slate-500">BLOCKS TODAY</div>
+                        <div class="text-4xl font-semibold mt-1" id="cal-blocks-count">0</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                        <div class="text-xs text-slate-500">ACTIVITIES LOGGED</div>
+                        <div class="text-4xl font-semibold mt-1 text-emerald-600" id="cal-activities-count">0</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                        <div class="text-xs text-slate-500">MOST ACTIVE TIME</div>
+                        <div class="text-2xl font-semibold mt-1">2-4pm</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                        <div class="text-xs text-slate-500">COMPLETION</div>
+                        <div class="text-4xl font-semibold mt-1 text-indigo-600">78%</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="closeBreakdownModal(); switchTab('activity')" 
+                            class="px-6 py-3 bg-indigo-600 text-white rounded-3xl text-sm font-semibold flex items-center gap-x-2">
+                        View Full Activity Log <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Populate visual timeline
+            setTimeout(() => {
+                const container = document.getElementById('calendar-today-timeline');
+                if (container && state.todayPlan && state.todayPlan.blocks) {
+                    container.innerHTML = '';
+                    state.todayPlan.blocks.forEach((block, index) => {
+                        const div = document.createElement('div');
+                        const color = block.type === 'deep' ? 'border-indigo-300 bg-indigo-50' : 
+                                     block.type === 'health' ? 'border-emerald-300 bg-emerald-50' : 'border-slate-200 bg-white';
+                        div.className = `p-4 rounded-3xl border ${color} transition-all hover:shadow-md`;
+                        div.innerHTML = `
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="font-mono text-xs text-slate-400">${block.time}</div>
+                                    <div class="font-semibold mt-1 leading-tight">${block.activity}</div>
+                                </div>
+                                <div class="text-xs px-2 py-0.5 rounded bg-white/70 border text-slate-500 self-start">${block.duration}</div>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    });
+                    
+                    // Update stats
+                    document.getElementById('cal-blocks-count').innerText = state.todayPlan.blocks.length;
+                    document.getElementById('cal-activities-count').innerText = (state.activities || []).length;
+                }
+            }, 150);
+        }
+
+        function showJournalDashboard() {
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            const entries = Object.keys(state.journal || {}).sort().reverse();
+            
+            let html = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <div class="font-semibold text-3xl">Journal Dashboard</div>
+                        <p class="text-slate-500">Your visual reflection history &amp; patterns</p>
+                    </div>
+                    <button onclick="closeBreakdownModal()" class="text-sm px-4 py-2 border border-slate-300 rounded-3xl">Close</button>
+                </div>
+            `;
+            
+            if (entries.length === 0) {
+                html += `<div class="text-center py-12"><p class="text-slate-500">No entries yet. Start reflecting on the main Dashboard.</p></div>`;
+            } else {
+                html += `<div class="space-y-4 max-h-[55vh] overflow-y-auto pr-2">`;
+                
+                entries.forEach(date => {
+                    const entry = state.journal[date];
+                    const hasWin = entry.win && entry.win.trim().length > 0;
+                    const hasDrain = entry.drain && entry.drain.trim().length > 0;
+                    
+                    html += `
+                        <div class="p-5 bg-white border border-slate-200 rounded-3xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="font-semibold text-lg text-emerald-700">${date}</div>
+                                ${hasWin ? `<div class="text-xs px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full">Win logged</div>` : ''}
+                            </div>
+                            
+                            ${hasWin ? `
+                                <div class="mb-3 p-3 bg-emerald-50 rounded-2xl">
+                                    <div class="text-xs font-medium text-emerald-600 mb-1">WIN</div>
+                                    <div class="text-sm">${entry.win}</div>
+                                </div>
+                            ` : ''}
+                            
+                            ${hasDrain ? `
+                                <div class="mb-3 p-3 bg-amber-50 rounded-2xl">
+                                    <div class="text-xs font-medium text-amber-600 mb-1">ENERGY DRAIN</div>
+                                    <div class="text-sm">${entry.drain}</div>
+                                </div>
+                            ` : ''}
+                            
+                            ${entry.notes ? `
+                                <div class="text-sm text-slate-600 leading-relaxed">${entry.notes}</div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            }
+            
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function showHealthDashboard() {
+            // Reuse existing health section by scrolling or showing modal with full view
+            const modal = document.getElementById('breakdown-modal');
+            const content = document.getElementById('breakdown-content');
+            
+            content.innerHTML = `
+                <div class="font-semibold text-2xl mb-4 flex items-center gap-x-2">
+                    <i class="fa-solid fa-heart-pulse text-rose-500"></i> Personal Health Dashboard
+                </div>
+                <div class="text-sm mb-4">Your dedicated space for movement, meals, and macros — completely separate from work.</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <div class="font-medium mb-2">Movement Today</div>
+                        <div id="health-movement-list"></div>
+                    </div>
+                    <div>
+                        <div class="font-medium mb-2">Meals &amp; Macros</div>
+                        <div id="health-meals-list"></div>
+                    </div>
+                </div>
+                
+                <button onclick="closeBreakdownModal(); document.getElementById('tab-health').classList.remove('active-tab'); switchTab('dashboard')" class="mt-6 w-full py-3 bg-rose-600 text-white rounded-3xl">Back to Dashboard</button>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Populate health data
+            setTimeout(() => {
+                renderHealthSection(); // This will update the main health section, but we can enhance here if needed
+            }, 200);
+        }
+
+        // Boot the app
+        window.onload = function() {
+            try {
+                initializeApp();
+                
+                // Show landing page by default
+                const landing = document.getElementById('landing-page');
+                const mainApp = document.getElementById('main-app');
+                
+                if (landing && mainApp) {
+                    landing.classList.remove('hidden');
+                    mainApp.classList.add('hidden');
+                }
+                
+                console.log('%c[VISION HUNTER] Prototype ready. Tailwind CDN warning suppressed.', 'color:#10b981');
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
+        };
+    </script>
+</body>
+</html>
